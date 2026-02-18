@@ -14,3 +14,5 @@ D-0008 | 2026-02-18 | CP-0009 | Rest tasks registered for OS-Illusion TUI MVP wi
 D-0009 | 2026-02-18 | CP-0016 | Enforce repository split: WORKFLOW only for governance artifacts, PROJECT only for project code/data; add WORKFLOW/check/temp and WORKFLOW/DOCS for visibility | Restores structural clarity while preserving executable project and human-readable workflow outputs
 D-0010 | 2026-02-18 | CP-0017 | requirements.txt must always install full runtime/UI/dev stack through package extras | Aligns user expectation with one-command complete setup
 D-0011 | 2026-02-18 | CP-0018 | Refactor Textual chat rendering to avoid removed `Static.renderable` API and use ASCII-safe UI labels/bars | Ensures startup stability on textual 8 and improves cross-terminal readability
+D-0012 | 2026-02-18 | CP-0019 | Standardize onboarding via `setup.ps1`/`start.ps1` and `setup.cmd`/`start.cmd` at repo root | Makes setup approachable for users without Python/venv experience
+D-0013 | 2026-02-18 | CP-0020 | Setup runs with a fresh virtual environment by default; `-KeepVenv` is explicit opt-out | Maximizes reproducibility and protects against polluted local Python state

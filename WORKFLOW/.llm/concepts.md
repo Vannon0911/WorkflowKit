@@ -14,3 +14,5 @@ C-0007 | 2026-02-18 | CP-0008 | Dual-mode UI architecture (Textual primary, plai
 C-0008 | 2026-02-18 | CP-0016 | Keep one canonical PROJECT at repository root, keep WORKFLOW purely governance, and expose workflow result summaries in WORKFLOW/DOCS | I-0008
 C-0009 | 2026-02-18 | CP-0017 | Define requirements.txt as a full-environment installer via editable extras (ui+dev) instead of partial package list | I-0009
 C-0010 | 2026-02-18 | CP-0018 | Keep chat log state in app-owned buffer instead of widget internals to stay compatible across Textual releases | I-0010
+C-0011 | 2026-02-18 | CP-0019 | Provide root-level setup/start scripts with cmd wrappers and sensible defaults | I-0011
+C-0012 | 2026-02-18 | CP-0020 | Default to rebuilding `.venv` in setup script, with explicit opt-out switch for fast reuse | I-0012

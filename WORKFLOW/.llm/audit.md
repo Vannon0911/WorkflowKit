@@ -20,3 +20,5 @@ A-0015 | CP-0015 | OK | Q-0007 abgeschlossen, OS-Illusion TUI MVP vollständig, 
 A-0016 | CP-0016 | OK | Strukturkorrektur abgeschlossen: WORKFLOW governance-only, PROJECT code/data-only, check/temp und DOCS ergänzt, Protokollkette konsistent
 A-0017 | CP-0017 | OK | Vollständiges Setup über requirements.txt verankert; Workflow-Revisionen und Mapping konsistent aktualisiert
 A-0018 | CP-0018 | OK | Textual-Fehler auf aktuellem Release reproduziert und behoben; Tests grün, Workflow-Mapping konsistent
+A-0019 | CP-0019 | OK | One-step Setup/Start vorhanden, Requirements-Pfadproblem behoben, Onboarding deutlich vereinfacht
+A-0020 | CP-0020 | OK | Setup läuft jetzt standardmäßig isoliert mit frischer venv; optionaler Reuse-Pfad dokumentiert und funktionsfähig

@@ -14,3 +14,5 @@ I-0007 | 2026-02-18 | CP-0008 | Massive UI overhaul: fixed OS boot sequence + ch
 I-0008 | 2026-02-18 | CP-0016 | Restore strict top-level split (WORKFLOW for governance, PROJECT for code/data) and add user-readable workflow output docs | Remove duplicate structure drift and improve maintainability
 I-0009 | 2026-02-18 | CP-0017 | Make requirements.txt represent a full setup so one install command brings all dependencies | Prevent partial installs and ensure predictable first run
 I-0010 | 2026-02-18 | CP-0018 | Fix Textual runtime compatibility and improve terminal readability defaults | Remove crash on launch with current textual version and reduce display friction
+I-0011 | 2026-02-18 | CP-0019 | Add one-step setup/start scripts for non-technical users | Reduce onboarding friction and avoid Python-specific manual steps
+I-0012 | 2026-02-18 | CP-0020 | Enforce clean isolated environment by default on each setup run | Prevent hidden state drift from previous local installs

@@ -1,20 +1,20 @@
 ﻿# CURRENT
 
-checkpoint: CP-0018
+checkpoint: CP-0020
 status: DONE
-spec_rev: 19
-queue_rev: 13
-build_rev: 12
+spec_rev: 21
+queue_rev: 15
+build_rev: 14
 
 latest_ids:
-- I: I-0010
-- C: C-0010
-- D: D-0011
-- Q: Q-0010
-- CHG: CHG-0016
-- V: V-0017
-- T: T-0018
-- A: A-0018
+- I: I-0012
+- C: C-0012
+- D: D-0013
+- Q: Q-0012
+- CHG: CHG-0018
+- V: V-0019
+- T: T-0020
+- A: A-0020
 
 tail_defaults:
 - cold_log_tail_entries: 50

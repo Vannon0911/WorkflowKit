@@ -26,5 +26,7 @@ Q-0007 | IMPLEMENTED | OS-Illusion TUI Upgrade 100% MVP + WorkflowKit per-change
 Q-0008 | IMPLEMENTED | Strukturkorrektur: WORKFLOW rein fuer Workflow, PROJECT rein fuer Projektdaten + check/temp + DOCS | codex | I-0008, C-0008, D-0009, CHG-0014
 Q-0009 | IMPLEMENTED | requirements.txt als Voll-Setup (alle Abhaengigkeiten) festlegen | codex | I-0009, C-0009, D-0010, CHG-0015
 Q-0010 | IMPLEMENTED | Textual-UI Crash beheben und Terminal-Lesbarkeit verbessern | codex | I-0010, C-0010, D-0011, CHG-0016
+Q-0011 | IMPLEMENTED | Onboarding vereinfachen mit One-Step Setup/Start Skripten | codex | I-0011, C-0011, D-0012, CHG-0017
+Q-0012 | IMPLEMENTED | Setup standardmäßig mit frischer venv erzwingen | codex | I-0012, C-0012, D-0013, CHG-0018
 
-Next available ID: Q-0011
+Next available ID: Q-0013

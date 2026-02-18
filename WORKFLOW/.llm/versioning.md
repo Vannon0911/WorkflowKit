@@ -21,3 +21,5 @@ V-0014 | 2026-02-18 | CP-0015 | 16 | 10 | 10 | Q-0007 implemented, OS-Illusion T
 V-0015 | 2026-02-18 | CP-0016 | 17 | 11 | 10 | Structural correction finalized: WORKFLOW governance only, PROJECT code/data only, plus check/temp and user-readable DOCS outputs
 V-0016 | 2026-02-18 | CP-0017 | 18 | 12 | 11 | requirements.txt now installs full setup via editable ui+dev extras; one-command complete environment
 V-0017 | 2026-02-18 | CP-0018 | 19 | 13 | 12 | Textual compatibility fix landed for current release; startup no longer uses removed widget internals
+V-0018 | 2026-02-18 | CP-0019 | 20 | 14 | 13 | Added one-step setup/start scripts and cmd wrappers for non-technical onboarding
+V-0019 | 2026-02-18 | CP-0020 | 21 | 15 | 14 | Setup now recreates virtual environment by default to guarantee clean reproducible installs

@@ -4,6 +4,22 @@ Deterministische Terminal-Wirtschaftssimulation mit einem regelbasierten SHINON-
 
 ## Start
 
+Einfachster Weg (vom Repo-Root aus):
+
+```bash
+./setup.ps1
+./start.ps1
+```
+
+Hinweis: `setup.ps1` erstellt standardmäßig bei jedem Lauf eine frische `.venv` (isoliert, reproduzierbar).
+Wenn du die vorhandene Umgebung behalten willst: `./setup.ps1 -KeepVenv`
+
+Alternativ per Doppelklick:
+- `setup.cmd`
+- `start.cmd`
+
+Manuell:
+
 ```bash
 cd PROJECT
 python -m pip install -r requirements.txt
