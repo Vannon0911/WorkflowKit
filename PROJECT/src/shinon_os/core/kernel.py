@@ -2,15 +2,15 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from shinon_os.cli.render import render_table
 from shinon_os.core import intents
+from shinon_os.core.formatting import render_table
 from shinon_os.core.blocks.interpret import parse_input
 from shinon_os.core.blocks.narrate import render_action_report, render_view_header
 from shinon_os.core.blocks.plan import create_plan
 from shinon_os.core.blocks.sense import build_observations
 from shinon_os.core.blocks.stance import update_stance
 from shinon_os.core.memory import KernelMemory
-from shinon_os.core.types import KernelResponse, StanceState
+from shinon_os.core.types import ChatTurnModel, KernelResponse, StanceState
 from shinon_os.sim.engine import SimulationEngine
 from shinon_os.sim.model import GameState, WorldState
 from shinon_os.util.logging_setup import JsonlRotatingLogger
@@ -144,7 +144,7 @@ class ShinonKernel:
         return (
             "view: EXPLAIN\n"
             "topics: explain prices | explain shortages | explain policy <POLICY_ID>\n"
-            "view commands do not advance turns. enact commands advance exactly one turn."
+            "view prompts do not advance turns. actionable prompts may trigger one turn if intent is clear."
         )
 
     def _render_view(self, intent_kind: str, state: GameState, topic: str = "general") -> tuple[str, str]:
@@ -169,10 +169,35 @@ class ShinonKernel:
         self.current_view = "dashboard"
         return self.current_view, self._render_dashboard(state)
 
+    def _policy_target_types(self) -> dict[str, str]:
+        return {policy_id: definition.target_type for policy_id, definition in self.engine.bundle.policies.items()}
+
+    def _chat_prompt_for_missing(self, missing_params: list[str], policy_id: str) -> str:
+        if "target" in missing_params:
+            return f"Target fehlt fuer {policy_id}. Nenne bitte ein gueltiges Ziel."
+        return f"Mehr Kontext benoetigt fuer {policy_id}."
+
+    def _chat_response(self, intent_kind: str, content: str, turn_advanced: bool, raw_message: str, executed_action: str | None = None, events: list[str] | None = None) -> KernelResponse:
+        events = events or []
+        return KernelResponse(
+            output=content,
+            current_view=self.current_view,
+            turn_advanced=turn_advanced,
+            chat_turn=ChatTurnModel(
+                user_message=raw_message,
+                recognized_intent=intent_kind,
+                executed_action=executed_action,
+                turn_advanced=turn_advanced,
+                delta_summary=content.splitlines()[2] if len(content.splitlines()) > 2 else "",
+                events=events,
+                follow_up_prompt="Weiter mit status/markt/measure oder einer neuen Direktive.",
+            ),
+        )
+
     def handle(self, raw_command: str) -> KernelResponse:
         state = self.engine.load_state()
         observations = build_observations(state, self.last_world_snapshot)
-        intent = parse_input(raw_command, self.current_view)
+        intent = parse_input(raw_command, self.current_view, policy_target_types=self._policy_target_types())
 
         if intent.kind == intents.QUIT:
             return KernelResponse(
@@ -180,43 +205,53 @@ class ShinonKernel:
                 current_view=self.current_view,
                 turn_advanced=False,
                 should_quit=True,
+                chat_turn=ChatTurnModel(
+                    user_message=raw_command,
+                    recognized_intent=intents.QUIT,
+                    executed_action=None,
+                    turn_advanced=False,
+                    delta_summary="",
+                    events=[],
+                    follow_up_prompt="",
+                ),
             )
-
-        if intent.kind == intents.HELP:
-            self.stance = update_stance(observations, self.stance)
-            plan = create_plan(intent, self.stance, observations, self.engine.policy_status(state))
-            help_text = (
-                "commands: dashboard | market | policies | industry | history | explain <topic>\n"
-                "action: enact <POLICY_ID> [magnitude] [target]\n"
-                "quit: quit"
-            )
-            output = (
-                render_view_header(state.world, self.stance, plan)
-                + "\n\nview: HELP\n"
-                + help_text
-                + "\nadvisor: "
-                + (", ".join(plan.recommendations) if plan.recommendations else "none")
-            )
-            self.last_world_snapshot = deepcopy(state.world)
-            return KernelResponse(output=output, current_view=self.current_view, turn_advanced=False)
 
         if intent.kind == intents.ENACT_POLICY:
             if "invalid" in intent.args:
-                return KernelResponse(
-                    output=f"SHINON // kernel online\nINVALID PARAM {intent.args['invalid']}",
-                    current_view=self.current_view,
+                return self._chat_response(
+                    intent_kind=intent.kind,
+                    content=f"SHINON // kernel online\nINVALID PARAM {intent.args['invalid']}",
                     turn_advanced=False,
+                    raw_message=raw_command,
                 )
+            if intent.missing_params:
+                policy_id = str(intent.args.get("policy_id", "UNKNOWN"))
+                return self._chat_response(
+                    intent_kind=intent.kind,
+                    content=f"SHINON // kernel online\n{self._chat_prompt_for_missing(intent.missing_params, policy_id)}",
+                    turn_advanced=False,
+                    raw_message=raw_command,
+                )
+            if not intent.auto_execute:
+                policy_id = str(intent.args.get("policy_id", "UNKNOWN"))
+                return self._chat_response(
+                    intent_kind=intent.kind,
+                    content=f"SHINON // kernel online\nIntent erkannt ({policy_id}) aber nicht eindeutig genug. Bitte Praezisierung senden.",
+                    turn_advanced=False,
+                    raw_message=raw_command,
+                )
+
             result = self.engine.advance_turn(
                 policy_id=str(intent.args["policy_id"]),
                 magnitude=intent.args.get("magnitude"),
                 target=intent.args.get("target"),
             )
             if not result.ok:
-                return KernelResponse(
-                    output=f"SHINON // kernel online\n{result.message}",
-                    current_view=self.current_view,
+                return self._chat_response(
+                    intent_kind=intent.kind,
+                    content=f"SHINON // kernel online\n{result.message}",
                     turn_advanced=False,
+                    raw_message=raw_command,
                 )
 
             new_state = self.engine.load_state()
@@ -236,7 +271,14 @@ class ShinonKernel:
             )
             self.current_view = "dashboard"
             self.last_world_snapshot = deepcopy(new_state.world)
-            return KernelResponse(output=output, current_view=self.current_view, turn_advanced=True)
+            return self._chat_response(
+                intent_kind=intent.kind,
+                content=output,
+                turn_advanced=True,
+                raw_message=raw_command,
+                executed_action=result.action_label,
+                events=[event["id"] for event in result.events],
+            )
 
         topic = str(intent.args.get("topic", "general"))
         self.stance = update_stance(observations, self.stance)
@@ -253,4 +295,9 @@ class ShinonKernel:
         )
         self.last_world_snapshot = deepcopy(state.world)
         self.logger.debug({"where": "kernel.view", "view": view_name, "turn": state.world.turn})
-        return KernelResponse(output=output, current_view=view_name, turn_advanced=False)
+        return self._chat_response(
+            intent_kind=intent.kind,
+            content=output,
+            turn_advanced=False,
+            raw_message=raw_command,
+        )

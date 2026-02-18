@@ -1,0 +1,26 @@
+{
+  "date": "2026-02-18",
+  "checkpoint": "CP-0016",
+  "status": "DONE",
+  "structure": {
+    "workflow": "governance-only",
+    "project": "code-and-data-only",
+    "check_temp": "WORKFLOW/check/temp",
+    "docs": "WORKFLOW/DOCS"
+  },
+  "revisions": {
+    "spec_rev": 17,
+    "queue_rev": 11,
+    "build_rev": 10
+  },
+  "latest_ids": {
+    "I": "I-0008",
+    "C": "C-0008",
+    "D": "D-0009",
+    "Q": "Q-0008",
+    "CHG": "CHG-0014",
+    "V": "V-0015",
+    "T": "T-0016",
+    "A": "A-0016"
+  }
+}

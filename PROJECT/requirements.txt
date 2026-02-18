@@ -1,5 +1,3 @@
-# SHINON OS dependency list
-# Runtime: stdlib only
-
-# Testing
-pytest>=8.0
+# SHINON Alpha World - full setup dependencies
+# Installs package + UI + dev/test extras in one step.
+-e .[ui,dev]

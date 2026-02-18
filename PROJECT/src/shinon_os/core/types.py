@@ -9,6 +9,9 @@ class Intent:
     kind: str
     raw: str
     args: dict[str, Any] = field(default_factory=dict)
+    confidence: float = 0.0
+    auto_execute: bool = False
+    missing_params: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -36,3 +39,22 @@ class KernelResponse:
     current_view: str
     turn_advanced: bool
     should_quit: bool = False
+    chat_turn: "ChatTurnModel | None" = None
+
+
+@dataclass
+class ChatTurnModel:
+    user_message: str
+    recognized_intent: str
+    executed_action: str | None
+    turn_advanced: bool
+    delta_summary: str
+    events: list[str]
+    follow_up_prompt: str
+
+
+@dataclass
+class BootSequenceModel:
+    stages: list[str]
+    durations_ms: list[int]
+    status: str

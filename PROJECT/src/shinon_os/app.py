@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+import time
 from pathlib import Path
 
-from shinon_os.cli.io import print_block, safe_input
 from shinon_os.core.kernel import ShinonKernel
-from shinon_os.core.types import KernelResponse
+from shinon_os.core.types import BootSequenceModel, KernelResponse
 from shinon_os.persistence.repo import StateRepository
 from shinon_os.sim.engine import SimulationEngine
 from shinon_os.sim.worldgen import DataBundle, load_data
@@ -20,6 +20,16 @@ class ShinonApp:
         self.repo = StateRepository(self.db_path)
         self.engine = SimulationEngine(bundle=self.bundle, repo=self.repo, logger=self.logger)
         self.kernel = ShinonKernel(engine=self.engine, logger=self.logger)
+        self._boot_model = BootSequenceModel(
+            stages=[
+                "Kernel init",
+                "DB mount / migration check",
+                "Subsystem checks",
+                "SHINON online",
+            ],
+            durations_ms=[650, 650, 700, 700],
+            status="PENDING",
+        )
 
     def has_existing_game(self) -> bool:
         return self.repo.has_game()
@@ -43,6 +53,22 @@ class ShinonApp:
     def snapshot(self) -> dict[str, object]:
         return self.engine.snapshot()
 
+    def boot_sequence_model(self) -> BootSequenceModel:
+        return BootSequenceModel(
+            stages=list(self._boot_model.stages),
+            durations_ms=list(self._boot_model.durations_ms),
+            status=self._boot_model.status,
+        )
+
+    def run_boot_sequence(self, emit: callable, sleep_fn: callable | None = None) -> None:
+        sleeper = sleep_fn or time.sleep
+        self._boot_model.status = "RUNNING"
+        for stage, duration_ms in zip(self._boot_model.stages, self._boot_model.durations_ms):
+            emit(f"[BOOT] {stage} ...")
+            sleeper(duration_ms / 1000.0)
+        self._boot_model.status = "DONE"
+        emit("[BOOT] SHINON kernel ready.")
+
     def shutdown(self) -> None:
         self.repo.close()
 
@@ -57,32 +83,26 @@ def _parse_seed(raw_seed: str) -> int:
         return 42
 
 
-def run_cli() -> None:
-    app = ShinonApp()
-    print_block("SHINON kernel booting...")
-    print_block(f"Save location: {app.db_path}")
-    try:
-        if app.has_existing_game():
-            choice = safe_input("[N]ew / [L]oad > ").strip().lower()
-            if choice.startswith("l"):
-                app.load_game()
-                print_block("Loaded existing simulation state.")
-            else:
-                seed = _parse_seed(safe_input("New game seed (default 42): "))
-                app.start_new_game(seed=seed)
-                print_block(f"Started new game with seed {seed}.")
-        else:
-            seed = _parse_seed(safe_input("New game seed (default 42): "))
-            app.start_new_game(seed=seed)
-            print_block(f"Started new game with seed {seed}.")
+def run_app(ui_mode: str | None = None, no_anim: bool = False, safe_ui: bool = False) -> None:
+    from shinon_os.app_service import AppOptions, AppService
+    from shinon_os.ui.factory import create_ui
 
-        first = app.process_command("dashboard")
-        print_block(first.output)
-        while True:
-            raw = safe_input("shinon> ")
-            response = app.process_command(raw)
-            print_block(response.output)
-            if response.should_quit:
-                break
+    service = AppService(AppOptions(ui_mode=ui_mode, no_anim=no_anim, safe_ui=safe_ui))
+    try:
+        session = create_ui(service)
+        session.run(service)
     finally:
-        app.shutdown()
+        service.shutdown()
+
+
+def select_profile(app: ShinonApp, ask_input: callable, emit: callable) -> None:
+    emit(f"Save location: {app.db_path}")
+    if app.has_existing_game():
+        choice = ask_input("[N]ew / [L]oad > ").strip().lower()
+        if choice.startswith("l"):
+            app.load_game()
+            emit("Loaded existing simulation state.")
+            return
+    seed = _parse_seed(ask_input("New game seed (default 42): "))
+    app.start_new_game(seed=seed)
+    emit(f"Started new game with seed {seed}.")

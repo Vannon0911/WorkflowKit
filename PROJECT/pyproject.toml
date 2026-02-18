@@ -12,6 +12,7 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
+ui = ["textual>=0.76.0"]
 
 [project.scripts]
 shinon-os = "shinon_os.__main__:main"
