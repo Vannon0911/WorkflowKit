@@ -1,12 +1,11 @@
-﻿{
-  "project": "Shinon",
-  "checkpoint": "CP-0003",
-  "status": "DRAFT",
-  "spec_rev": 3,
-  "queue_rev": 2,
-  "build_rev": 0,
-  "step": 0,
+{
+  "project": "SHINON_ALPHA_WORLD",
+  "checkpoint": "CP-0006",
+  "status": "DONE",
+  "spec_rev": 7,
+  "queue_rev": 6,
+  "build_rev": 3,
+  "step": 14,
   "base_build": "none",
   "must_read_all_llm_files": false
 }
-
