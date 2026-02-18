@@ -5,8 +5,6 @@ from typing import Callable
 
 from shinon_os.app import ShinonApp
 from shinon_os.core import intents
-from shinon_os.util.paths import default_transcript_dir
-from shinon_os.util.transcript import SessionTranscriptWriter
 from shinon_os.view_models import (
     CapabilityRegistry,
     DashboardVM,
@@ -51,46 +49,11 @@ class AppService:
             safe_mode=options.safe_ui,
             palette="oled",
         )
-        self.transcript = SessionTranscriptWriter(default_transcript_dir())
-        self._transcript_finalized = False
 
     def shutdown(self) -> None:
         self.app.shutdown()
 
-    def _mark_transcript_started(self) -> None:
-        self.transcript.mark_started(
-            ui_mode=self.options.ui_mode or "auto",
-            no_anim=self.options.no_anim,
-            safe_ui=self.options.safe_ui,
-            db_path=str(self.app.db_path),
-        )
-
-    def finalize_transcript_ok(self) -> None:
-        if self._transcript_finalized:
-            return
-        self._mark_transcript_started()
-        self.transcript.mark_finished(status="ok")
-        try:
-            self.transcript.flush()
-        except Exception as exc:  # pragma: no cover - defensive
-            self.app.logger.error({"where": "transcript.flush", "error": str(exc), "status": "ok"})
-        self._transcript_finalized = True
-
-    def finalize_transcript_error(self, exc: Exception | str) -> None:
-        if self._transcript_finalized:
-            return
-        self._mark_transcript_started()
-        error_text = str(exc)
-        self.transcript.add_entry("system", "Session terminated with error.", {"error": error_text})
-        self.transcript.mark_finished(status="error", error=error_text)
-        try:
-            self.transcript.flush()
-        except Exception as flush_exc:  # pragma: no cover - defensive
-            self.app.logger.error({"where": "transcript.flush", "error": str(flush_exc), "status": "error"})
-        self._transcript_finalized = True
-
     def bootstrap(self) -> OSResponse:
-        self._mark_transcript_started()
         try:
             if self.capabilities.animations_enabled:
                 self.app.run_boot_sequence(emit=lambda msg: self.app.logger.debug({"where": "boot", "msg": msg}))
@@ -283,8 +246,6 @@ class AppService:
 
     def handle_input(self, text: str) -> OSResponse:
         raw = text or ""
-        self._mark_transcript_started()
-        self.transcript.add_entry("user", raw)
         try:
             response = self.app.process_command(raw)
             self.app.logger.debug({"where": "app_service.handle", "raw": raw, "turn_advanced": response.turn_advanced})
@@ -309,26 +270,10 @@ class AppService:
                 should_quit=response.should_quit,
                 events=response.chat_turn.events if response.chat_turn else [],
             )
-            self.transcript.add_entry(
-                "assistant",
-                os_response.message,
-                {
-                    "intent": response.chat_turn.recognized_intent if response.chat_turn else "",
-                    "view": os_response.view,
-                    "turn_advanced": os_response.turn_advanced,
-                    "should_quit": os_response.should_quit,
-                    "events": os_response.events,
-                },
-            )
             return os_response
         except Exception as exc:  # pragma: no cover - defensive
             self.app.logger.error({"where": "app_service.handle.error", "raw": raw, "error": str(exc)})
             error_response = self._os_error("Subsystem not available")
-            self.transcript.add_entry(
-                "assistant",
-                error_response.message,
-                {"intent": "ERROR", "view": error_response.view, "turn_advanced": False, "error": str(exc)},
-            )
             return error_response
 
     def _select_view_model(self, intent_kind_or_view: str, raw: str) -> object | None:

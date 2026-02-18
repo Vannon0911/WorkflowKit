@@ -24,3 +24,4 @@ A-0019 | CP-0019 | OK | One-step Setup/Start vorhanden, Requirements-Pfadproblem
 A-0020 | CP-0020 | OK | Setup läuft jetzt standardmäßig isoliert mit frischer venv; optionaler Reuse-Pfad dokumentiert und funktionsfähig
 A-0021 | CP-0021 | OK | Symbol-Level Traceability und maschineller Audit-Check aktiv; Dependency-Lock verankert und überprüfbar
 A-0022 | CP-0022 | OK | PROJECT runtime auf .llm-Unabhängigkeit geprüft/erzwungen; Session-Transkripte (JSON+TXT) werden bei Quit und Error best-effort in User-DOCS persistiert
+A-0023 | CP-0023 | OK | SHINON-runtime enthält keine Transcript-Logik mehr; Copilot-Transkripte laufen separat über Workflow-Tool und sind auditierbar dokumentiert

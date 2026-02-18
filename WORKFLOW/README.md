@@ -15,6 +15,7 @@ Governance traceability:
 Automated audit:
 - `python WORKFLOW/check/audit_check.py`
 
-Session transcript runtime behavior:
-- `PROJECT` writes transcripts to `%LOCALAPPDATA%/shinon_os/docs/transcripts`
-- output formats: `.json` and `.txt`
+Copilot transcript tooling (separate from PROJECT runtime):
+- Script: `WORKFLOW/tools/copilot_transcript.ps1`
+- Storage path: `%LOCALAPPDATA%/copilot_docs/transcripts`
+- Formats: `.json` and `.txt`

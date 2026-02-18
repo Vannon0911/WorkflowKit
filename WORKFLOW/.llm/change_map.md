@@ -37,3 +37,16 @@ MAP-0026 | 2026-02-18 | CP-0022 | CHG-0020 | README.md | Session transcripts sec
 MAP-0027 | 2026-02-18 | CP-0022 | CHG-0020 | PROJECT/README.md | Session transcripts section | UPDATE | Added project-level transcript behavior for operators
 MAP-0028 | 2026-02-18 | CP-0022 | CHG-0020 | WORKFLOW/README.md | Session transcript runtime behavior section | UPDATE | Added workflow-side visibility for runtime transcript behavior
 MAP-0029 | 2026-02-18 | CP-0022 | CHG-0020 | WORKFLOW/check/README.md | Validated areas section | UPDATE | Documented new checks for runtime isolation and transcript module presence
+MAP-0030 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/src/shinon_os/app_service.py | transcript lifecycle methods + handle_input transcript entries | DELETE | Removed transcript ownership from SHINON runtime service
+MAP-0031 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/src/shinon_os/app.py | run_app transcript finalize control flow | DELETE | Removed global transcript finalize hooks from runtime wrapper
+MAP-0032 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/src/shinon_os/ui/plain_cli.py | PlainCliSession.run transcript finalize hooks | DELETE | Plain session no longer writes transcripts
+MAP-0033 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/src/shinon_os/ui/textual_app.py | TextualSession transcript finalize hooks | DELETE | Textual session no longer writes transcripts
+MAP-0034 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/src/shinon_os/util/transcript.py | SessionTranscriptWriter | DELETE | Removed SHINON-specific transcript implementation
+MAP-0035 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/tests/test_transcript_written_on_quit.py | test_transcript_written_on_quit | DELETE | Removed tests tied to SHINON transcript behavior
+MAP-0036 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/tests/test_transcript_written_on_error.py | test_transcript_written_on_session_error | DELETE | Removed tests tied to SHINON transcript behavior
+MAP-0037 | 2026-02-18 | CP-0023 | CHG-0021 | WORKFLOW/tools/copilot_transcript.ps1 | FILE_SCOPE | ADD | Added standalone Copilot transcript lifecycle tool (start/add/finish)
+MAP-0038 | 2026-02-18 | CP-0023 | CHG-0021 | WORKFLOW/check/audit_check.py | copilot transcript tool presence check | UPDATE | Audit now validates workflow transcript tool instead of SHINON module
+MAP-0039 | 2026-02-18 | CP-0023 | CHG-0021 | README.md | Copilot transcripts section | UPDATE | Repointed transcript documentation to standalone workflow tool
+MAP-0040 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/README.md | Session transcript section | DELETE | Removed PROJECT runtime transcript documentation
+MAP-0041 | 2026-02-18 | CP-0023 | CHG-0021 | WORKFLOW/README.md | Copilot transcript tooling section | UPDATE | Documented transcript ownership split and storage path
+MAP-0042 | 2026-02-18 | CP-0023 | CHG-0021 | WORKFLOW/check/README.md | Validated areas section | UPDATE | Updated audit scope wording for copilot transcript tool

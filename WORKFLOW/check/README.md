@@ -26,7 +26,7 @@ Validated areas:
 - queue IMPLEMENTED to CHG linkage
 - dependency lock and setup lock enforcement
 - runtime independence from `WORKFLOW/.llm` inside `PROJECT/src`
-- transcript module presence for session export
+- copilot transcript tool presence (`WORKFLOW/tools/copilot_transcript.ps1`)
 
 Report output:
 - `WORKFLOW/check/temp/audit_report.json`

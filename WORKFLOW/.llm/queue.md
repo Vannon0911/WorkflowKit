@@ -30,5 +30,6 @@ Q-0011 | IMPLEMENTED | Onboarding vereinfachen mit One-Step Setup/Start Skripten
 Q-0012 | IMPLEMENTED | Setup standardmäßig mit frischer venv erzwingen | codex | I-0012, C-0012, D-0013, CHG-0018
 Q-0013 | IMPLEMENTED | Workflow-Trace-Regel auf Symbol-Ebene + automatischer Audit-Check + harte Dependency-Locks | codex | I-0013, C-0013, D-0014, CHG-0019
 Q-0014 | IMPLEMENTED | Systemprüfung ohne .llm Runtime-Kopplung + automatische Session-Transkripte in User-DOCS | codex | I-0014, C-0014, D-0015, CHG-0020
+Q-0015 | IMPLEMENTED | Copilot-Transkripte vom SHINON-Runtime-System trennen und als eigenes Workflow-Tool führen | codex | I-0015, C-0015, D-0016, CHG-0021
 
-Next available ID: Q-0015
+Next available ID: Q-0016

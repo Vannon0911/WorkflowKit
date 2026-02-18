@@ -193,6 +193,11 @@ def main() -> int:
         check_sequence([r.map_num for r in map_rows], "MAP", errors)
 
         chg_ids = {r.chg_id for r in changes}
+        deleted_files_by_map: dict[str, list[int]] = {}
+        for row in map_rows:
+            if row.action == "DELETE":
+                deleted_files_by_map.setdefault(row.file, []).append(row.map_num)
+
         map_by_chg: dict[str, list[MapRow]] = {}
         for row in map_rows:
             if row.chg_id not in chg_ids:
@@ -201,7 +206,9 @@ def main() -> int:
             if row.action != "DELETE":
                 target = ROOT / row.file
                 if not target.exists():
-                    errors.append(f"MAP file does not exist: {row.file}")
+                    deleted_later = any(n > row.map_num for n in deleted_files_by_map.get(row.file, []))
+                    if not deleted_later:
+                        errors.append(f"MAP file does not exist: {row.file}")
 
         for change in changes:
             if change.chg_num < enforce_from_chg:
@@ -237,9 +244,9 @@ def main() -> int:
         if "constraints.lock.txt" not in setup_text:
             errors.append("setup.ps1 must enforce dependency lock file")
 
-        transcript_file = PROJECT_DIR / "src" / "shinon_os" / "util" / "transcript.py"
-        if not transcript_file.exists():
-            errors.append("Missing transcript writer module: PROJECT/src/shinon_os/util/transcript.py")
+        copilot_transcript_tool = WORKFLOW_DIR / "tools" / "copilot_transcript.ps1"
+        if not copilot_transcript_tool.exists():
+            errors.append("Missing copilot transcript tool: WORKFLOW/tools/copilot_transcript.ps1")
 
         workflow_ref_pattern = re.compile(r"WORKFLOW[\\/]\.llm", flags=re.IGNORECASE)
         for py_file in (PROJECT_DIR / "src").rglob("*.py"):

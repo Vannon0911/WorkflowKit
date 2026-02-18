@@ -32,11 +32,5 @@ def default_docs_dir() -> Path:
     return path
 
 
-def default_transcript_dir() -> Path:
-    path = default_docs_dir() / "transcripts"
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
 def package_data_dir() -> Path:
     return Path(str(resources.files("shinon_os.data")))

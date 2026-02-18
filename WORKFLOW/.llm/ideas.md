@@ -18,3 +18,4 @@ I-0011 | 2026-02-18 | CP-0019 | Add one-step setup/start scripts for non-technic
 I-0012 | 2026-02-18 | CP-0020 | Enforce clean isolated environment by default on each setup run | Prevent hidden state drift from previous local installs
 I-0013 | 2026-02-18 | CP-0021 | Enforce symbol-level workflow traceability and machine-checkable audits with locked dependencies | Prevent incomplete change documentation and dependency drift regressions
 I-0014 | 2026-02-18 | CP-0022 | Guarantee project runtime independence from .llm and auto-export session transcripts to user docs | Ensure fresh-system operability and persistent operator trace outside repository writes
+I-0015 | 2026-02-18 | CP-0023 | Decouple transcripts from SHINON runtime and manage Copilot/ChatGPT transcripts as a separate workflow tool | Keep PROJECT domain-pure while preserving full session documentation outside app runtime

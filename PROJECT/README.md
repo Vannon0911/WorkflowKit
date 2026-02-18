@@ -45,12 +45,6 @@ python WORKFLOW/check/audit_check.py
 powershell -File PROJECT/scripts/refresh_lock.ps1
 ```
 
-## Session transcripts
-
-- Storage path: `%LOCALAPPDATA%/shinon_os/docs/transcripts`
-- Formats: `.json` and `.txt`
-- Trigger: normal quit and best-effort on session error/crash
-
 UI mode override and safety flags:
 
 ```bash

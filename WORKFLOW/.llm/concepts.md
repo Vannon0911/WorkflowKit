@@ -18,3 +18,4 @@ C-0011 | 2026-02-18 | CP-0019 | Provide root-level setup/start scripts with cmd 
 C-0012 | 2026-02-18 | CP-0020 | Default to rebuilding `.venv` in setup script, with explicit opt-out switch for fast reuse | I-0012
 C-0013 | 2026-02-18 | CP-0021 | Introduce enforced CHG->MAP symbol mapping with automated validation and locked dependency graph checks | I-0013
 C-0014 | 2026-02-18 | CP-0022 | Session transcript writer in LOCALAPPDATA docs with JSON+TXT dual output and best-effort crash finalization | I-0014
+C-0015 | 2026-02-18 | CP-0023 | Transcript ownership split: SHINON keeps gameplay runtime only, Copilot transcripts handled by dedicated workflow tool with append lifecycle | I-0015

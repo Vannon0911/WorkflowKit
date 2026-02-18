@@ -34,7 +34,8 @@ Audit check:
 Dependency lock refresh:
 - `powershell -File PROJECT/scripts/refresh_lock.ps1`
 
-Session transcripts:
-- Saved to `%LOCALAPPDATA%/shinon_os/docs/transcripts`
+Copilot transcripts:
+- Separate from `PROJECT` runtime
+- Tool: `WORKFLOW/tools/copilot_transcript.ps1`
+- Saved to `%LOCALAPPDATA%/copilot_docs/transcripts`
 - Written as `.json` and `.txt`
-- Triggered on normal quit and best-effort on session error/crash
