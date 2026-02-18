@@ -21,3 +21,4 @@ C-0014 | 2026-02-18 | CP-0022 | Session transcript writer in LOCALAPPDATA docs w
 C-0015 | 2026-02-18 | CP-0023 | Transcript ownership split: SHINON keeps gameplay runtime only, Copilot transcripts handled by dedicated workflow tool with append lifecycle | I-0015
 C-0016 | 2026-02-18 | CP-0024 | Introduce locale-keyed content model (with fallback labels), persisted unlock state, and collapse-gated emergency policy surface while keeping command syntax stable | I-0016
 C-0017 | 2026-02-18 | CP-0025 | Step-atomic governance flow: every mutation is immediately mirrored into trace/changes/change_map/current before the next mutation | I-0017
+C-0018 | 2026-02-18 | CP-0026 | Project audit validates zero critical bugs, complete game mechanics, deterministic reproducibility, and player agency balance across 31-test suite | I-0017, D-0019
