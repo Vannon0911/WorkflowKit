@@ -1,0 +1,11 @@
+﻿{
+  "project": "Shinon",
+  "checkpoint": "CP-0002",
+  "status": "DRAFT",
+  "spec_rev": 2,
+  "queue_rev": 1,
+  "build_rev": 0,
+  "step": 0,
+  "base_build": "none",
+  "must_read_all_llm_files": true
+}

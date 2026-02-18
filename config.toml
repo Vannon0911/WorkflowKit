@@ -1,0 +1,34 @@
+﻿[workflow]
+name = "universal-workflow"
+version = 2
+llm_dir = "WORKFLOW/.llm"
+project_dir = "PROJECT"
+source_of_truth = "WORKFLOW/.llm"
+must_read_all_llm_files = true
+enforce_llm_rules = true
+drift_prevention = true
+
+[rules]
+trace_append_only = true
+audit_append_only = true
+implemented_requires_qid = true
+no_secrets = true
+state_is_authoritative = true
+must_log_ideas = true
+must_log_concepts = true
+must_log_versions = true
+
+[logging]
+state_file = "WORKFLOW/.llm/state.json"
+queue_file = "WORKFLOW/.llm/queue.md"
+decisions_file = "WORKFLOW/.llm/decisions.md"
+ideas_file = "WORKFLOW/.llm/ideas.md"
+concepts_file = "WORKFLOW/.llm/concepts.md"
+trace_file = "WORKFLOW/.llm/trace.md"
+audit_file = "WORKFLOW/.llm/audit.md"
+versioning_file = "WORKFLOW/.llm/versioning.md"
+
+[drift]
+require_all_llm_files_present = true
+require_rev_bump_on_managed_change = true
+require_trace_and_audit_for_checkpoint = true
