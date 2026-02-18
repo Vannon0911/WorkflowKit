@@ -22,3 +22,5 @@ A-0017 | CP-0017 | OK | Vollständiges Setup über requirements.txt verankert; W
 A-0018 | CP-0018 | OK | Textual-Fehler auf aktuellem Release reproduziert und behoben; Tests grün, Workflow-Mapping konsistent
 A-0019 | CP-0019 | OK | One-step Setup/Start vorhanden, Requirements-Pfadproblem behoben, Onboarding deutlich vereinfacht
 A-0020 | CP-0020 | OK | Setup läuft jetzt standardmäßig isoliert mit frischer venv; optionaler Reuse-Pfad dokumentiert und funktionsfähig
+A-0021 | CP-0021 | OK | Symbol-Level Traceability und maschineller Audit-Check aktiv; Dependency-Lock verankert und überprüfbar
+A-0022 | CP-0022 | OK | PROJECT runtime auf .llm-Unabhängigkeit geprüft/erzwungen; Session-Transkripte (JSON+TXT) werden bei Quit und Error best-effort in User-DOCS persistiert

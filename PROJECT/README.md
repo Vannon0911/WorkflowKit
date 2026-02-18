@@ -26,6 +26,31 @@ python -m pip install -r requirements.txt
 python -m shinon_os
 ```
 
+## Audit and traceability
+
+- Change summary: `WORKFLOW/.llm/changes.md`
+- Symbol-level change map: `WORKFLOW/.llm/change_map.md`
+- Automated check:
+
+```bash
+python WORKFLOW/check/audit_check.py
+```
+
+## Dependency lock
+
+- Default setup is constrained by `PROJECT/constraints.lock.txt`.
+- Regenerate lock intentionally:
+
+```bash
+powershell -File PROJECT/scripts/refresh_lock.ps1
+```
+
+## Session transcripts
+
+- Storage path: `%LOCALAPPDATA%/shinon_os/docs/transcripts`
+- Formats: `.json` and `.txt`
+- Trigger: normal quit and best-effort on session error/crash
+
 UI mode override and safety flags:
 
 ```bash

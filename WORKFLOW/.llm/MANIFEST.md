@@ -19,6 +19,7 @@ Cold files (tail-read by default):
 - ideas.md
 - concepts.md
 - changes.md
+- change_map.md
 - versioning.md
 - trace.md
 - audit.md

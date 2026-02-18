@@ -11,3 +11,9 @@ PROJECT/.venv/
 
 # Local editor files
 .vscode/
+
+# Generated workflow reports
+WORKFLOW/check/temp/*.json
+
+# Local backups
+BACKUPS/

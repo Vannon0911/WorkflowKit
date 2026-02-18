@@ -14,5 +14,5 @@ Workflowkit goals:
 Execution model:
 - WORKFLOW/.llm is the only source of truth.
 - state.json anchors checkpoint and revision counters.
-- ideas.md -> concepts.md -> queue.md -> changes.md -> implementation forms the chain.
+- ideas.md -> concepts.md -> queue.md -> changes.md -> change_map.md -> implementation forms the chain.
 - trace.md and audit.md are append-only historical logs.

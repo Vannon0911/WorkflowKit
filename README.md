@@ -22,3 +22,19 @@ Manual run (from `PROJECT/`):
 - `python -m shinon_os` (Textual UI default)
 - `python -m shinon_os --safe-ui` to force plain fallback
 - `python -m shinon_os --no-anim` to disable boot/idle FX
+
+Workflow traceability:
+- High-level file mapping: `WORKFLOW/.llm/changes.md`
+- Symbol-level code mapping: `WORKFLOW/.llm/change_map.md`
+
+Audit check:
+- `python WORKFLOW/check/audit_check.py`
+- Report output: `WORKFLOW/check/temp/audit_report.json`
+
+Dependency lock refresh:
+- `powershell -File PROJECT/scripts/refresh_lock.ps1`
+
+Session transcripts:
+- Saved to `%LOCALAPPDATA%/shinon_os/docs/transcripts`
+- Written as `.json` and `.txt`
+- Triggered on normal quit and best-effort on session error/crash

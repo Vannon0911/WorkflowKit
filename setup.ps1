@@ -10,9 +10,13 @@ $projectDir = Join-Path $repoRoot "PROJECT"
 $venvDir = Join-Path $projectDir ".venv"
 $venvPython = Join-Path $venvDir "Scripts\python.exe"
 $requirements = Join-Path $projectDir "requirements.txt"
+$constraints = Join-Path $projectDir "constraints.lock.txt"
 
 if (-not (Test-Path $projectDir)) {
     throw "PROJECT folder not found at $projectDir"
+}
+if (-not (Test-Path $constraints)) {
+    throw "Missing lock file: $constraints"
 }
 
 function Resolve-PythonCommand {
@@ -42,7 +46,7 @@ if (-not (Test-Path $venvPython)) {
 Write-Host "Installing dependencies..."
 Push-Location $projectDir
 try {
-    & $venvPython -m pip install -r $requirements
+    & $venvPython -m pip install -r $requirements -c $constraints
 }
 finally {
     Pop-Location

@@ -16,3 +16,5 @@ C-0009 | 2026-02-18 | CP-0017 | Define requirements.txt as a full-environment in
 C-0010 | 2026-02-18 | CP-0018 | Keep chat log state in app-owned buffer instead of widget internals to stay compatible across Textual releases | I-0010
 C-0011 | 2026-02-18 | CP-0019 | Provide root-level setup/start scripts with cmd wrappers and sensible defaults | I-0011
 C-0012 | 2026-02-18 | CP-0020 | Default to rebuilding `.venv` in setup script, with explicit opt-out switch for fast reuse | I-0012
+C-0013 | 2026-02-18 | CP-0021 | Introduce enforced CHG->MAP symbol mapping with automated validation and locked dependency graph checks | I-0013
+C-0014 | 2026-02-18 | CP-0022 | Session transcript writer in LOCALAPPDATA docs with JSON+TXT dual output and best-effort crash finalization | I-0014

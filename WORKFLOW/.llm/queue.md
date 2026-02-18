@@ -28,5 +28,7 @@ Q-0009 | IMPLEMENTED | requirements.txt als Voll-Setup (alle Abhaengigkeiten) fe
 Q-0010 | IMPLEMENTED | Textual-UI Crash beheben und Terminal-Lesbarkeit verbessern | codex | I-0010, C-0010, D-0011, CHG-0016
 Q-0011 | IMPLEMENTED | Onboarding vereinfachen mit One-Step Setup/Start Skripten | codex | I-0011, C-0011, D-0012, CHG-0017
 Q-0012 | IMPLEMENTED | Setup standardmäßig mit frischer venv erzwingen | codex | I-0012, C-0012, D-0013, CHG-0018
+Q-0013 | IMPLEMENTED | Workflow-Trace-Regel auf Symbol-Ebene + automatischer Audit-Check + harte Dependency-Locks | codex | I-0013, C-0013, D-0014, CHG-0019
+Q-0014 | IMPLEMENTED | Systemprüfung ohne .llm Runtime-Kopplung + automatische Session-Transkripte in User-DOCS | codex | I-0014, C-0014, D-0015, CHG-0020
 
-Next available ID: Q-0013
+Next available ID: Q-0015

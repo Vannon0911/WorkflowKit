@@ -23,3 +23,5 @@ V-0016 | 2026-02-18 | CP-0017 | 18 | 12 | 11 | requirements.txt now installs ful
 V-0017 | 2026-02-18 | CP-0018 | 19 | 13 | 12 | Textual compatibility fix landed for current release; startup no longer uses removed widget internals
 V-0018 | 2026-02-18 | CP-0019 | 20 | 14 | 13 | Added one-step setup/start scripts and cmd wrappers for non-technical onboarding
 V-0019 | 2026-02-18 | CP-0020 | 21 | 15 | 14 | Setup now recreates virtual environment by default to guarantee clean reproducible installs
+V-0020 | 2026-02-18 | CP-0021 | 22 | 16 | 15 | Added mandatory symbol-level change map, automated audit checker, and locked dependency constraints workflow
+V-0021 | 2026-02-18 | CP-0022 | 23 | 17 | 16 | Enforced runtime independence from WORKFLOW/.llm and added dual-format session transcripts in LOCALAPPDATA docs with tests

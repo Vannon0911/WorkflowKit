@@ -8,8 +8,9 @@
 6. Record policy and architecture decisions in decisions.md (D-IDs).
 7. Apply changes in PROJECT/ or WORKFLOW/ as required by the active Q-ID.
 8. Append one compact mapping row in changes.md: Q-ID -> files -> summary.
-9. Update state.json revision counters and checkpoint when governance state changes.
-10. Append trace.md and audit.md entries for each checkpoint-relevant transition.
-11. Append versioning.md entry that snapshots checkpoint and revision counters.
-12. Update CURRENT.md with latest IDs to avoid full-log scans.
-13. Never store secrets.
+9. Append symbol-level mapping rows in change_map.md for each enforced code-relevant CHG-ID.
+10. Update state.json revision counters and checkpoint when governance state changes.
+11. Append trace.md and audit.md entries for each checkpoint-relevant transition.
+12. Append versioning.md entry that snapshots checkpoint and revision counters.
+13. Update CURRENT.md with latest IDs to avoid full-log scans.
+14. Never store secrets.

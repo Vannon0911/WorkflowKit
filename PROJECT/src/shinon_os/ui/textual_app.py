@@ -123,6 +123,7 @@ class TextualSession:
                     self.add_class("fx-turn")
                     self.set_timer(0.3, lambda: self.remove_class("fx-turn"))
                 if resp.should_quit:
+                    service.finalize_transcript_ok()
                     self.app.exit()
 
             def _update_view(self, view: str) -> None:
@@ -189,5 +190,9 @@ class TextualSession:
             def on_mount(self) -> None:
                 self.push_screen(BootScreen())
 
-        ShinonTextualApp().run()
+        try:
+            ShinonTextualApp().run()
+        except Exception as exc:
+            service.finalize_transcript_error(exc)
+            raise
         return 0

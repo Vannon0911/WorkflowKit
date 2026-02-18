@@ -1,3 +1,4 @@
 # SHINON Alpha World - full setup dependencies
 # Installs package + UI + dev/test extras in one step.
+-c constraints.lock.txt
 -e .[ui,dev]

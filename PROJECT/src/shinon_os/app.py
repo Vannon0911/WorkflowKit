@@ -88,10 +88,17 @@ def run_app(ui_mode: str | None = None, no_anim: bool = False, safe_ui: bool = F
     from shinon_os.ui.factory import create_ui
 
     service = AppService(AppOptions(ui_mode=ui_mode, no_anim=no_anim, safe_ui=safe_ui))
+    run_error: BaseException | None = None
     try:
         session = create_ui(service)
         session.run(service)
+    except BaseException as exc:
+        run_error = exc
+        service.finalize_transcript_error(exc)
+        raise
     finally:
+        if run_error is None:
+            service.finalize_transcript_ok()
         service.shutdown()
 
 

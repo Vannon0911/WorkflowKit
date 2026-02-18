@@ -16,3 +16,5 @@ I-0009 | 2026-02-18 | CP-0017 | Make requirements.txt represent a full setup so 
 I-0010 | 2026-02-18 | CP-0018 | Fix Textual runtime compatibility and improve terminal readability defaults | Remove crash on launch with current textual version and reduce display friction
 I-0011 | 2026-02-18 | CP-0019 | Add one-step setup/start scripts for non-technical users | Reduce onboarding friction and avoid Python-specific manual steps
 I-0012 | 2026-02-18 | CP-0020 | Enforce clean isolated environment by default on each setup run | Prevent hidden state drift from previous local installs
+I-0013 | 2026-02-18 | CP-0021 | Enforce symbol-level workflow traceability and machine-checkable audits with locked dependencies | Prevent incomplete change documentation and dependency drift regressions
+I-0014 | 2026-02-18 | CP-0022 | Guarantee project runtime independence from .llm and auto-export session transcripts to user docs | Ensure fresh-system operability and persistent operator trace outside repository writes
