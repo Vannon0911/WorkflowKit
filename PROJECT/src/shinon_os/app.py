@@ -61,9 +61,15 @@ class ShinonApp:
         )
 
     def run_boot_sequence(self, emit: callable, sleep_fn: callable | None = None) -> None:
+        stages = self._boot_model.stages
+        durations = self._boot_model.durations_ms
+        if len(stages) != len(durations):
+            msg = f"Boot sequence config mismatch: stages={len(stages)} durations={len(durations)}"
+            self.logger.error({"where": "boot", "msg": msg})
+            raise ValueError(msg)
         sleeper = sleep_fn or time.sleep
         self._boot_model.status = "RUNNING"
-        for stage, duration_ms in zip(self._boot_model.stages, self._boot_model.durations_ms):
+        for stage, duration_ms in zip(stages, durations):
             emit(f"[BOOT] {stage} ...")
             sleeper(duration_ms / 1000.0)
         self._boot_model.status = "DONE"

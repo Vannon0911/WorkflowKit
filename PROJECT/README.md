@@ -1,4 +1,4 @@
-# SHINON // Alpha World
+﻿# SHINON // Alpha World
 
 Deterministische Terminal-Wirtschaftssimulation mit einem regelbasierten SHINON-Kernel.
 
@@ -6,13 +6,13 @@ Deterministische Terminal-Wirtschaftssimulation mit einem regelbasierten SHINON-
 
 Einfachster Weg (vom Repo-Root aus):
 
-```bash
-./setup.ps1
-./start.ps1
+```powershell
+.\setup.ps1
+.\start.ps1
 ```
 
 Hinweis: `setup.ps1` erstellt standardmäßig bei jedem Lauf eine frische `.venv` (isoliert, reproduzierbar).
-Wenn du die vorhandene Umgebung behalten willst: `./setup.ps1 -KeepVenv`
+Wenn du die vorhandene Umgebung behalten willst: `.\setup.ps1 -KeepVenv`
 
 Alternativ per Doppelklick:
 - `setup.cmd`
@@ -20,7 +20,7 @@ Alternativ per Doppelklick:
 
 Manuell:
 
-```bash
+```powershell
 cd PROJECT
 python -m pip install -r requirements.txt
 python -m shinon_os
@@ -73,3 +73,4 @@ python -m pytest -q
 - SQLite mit WAL, Foreign Keys und Migrationen.
 - View-Kommandos treiben keine Zeit voran; Action-Kommandos treiben exakt einen Turn voran.
 - Start zeigt eine fixe OS-Bootsequenz und wechselt danach in einen chat-zentrierten Operator-Flow.
+

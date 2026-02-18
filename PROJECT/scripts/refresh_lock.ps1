@@ -8,7 +8,7 @@ $requirements = Join-Path $projectDir "requirements.txt"
 $lockPath = Join-Path $projectDir "constraints.lock.txt"
 
 if (-not (Test-Path $venvPython)) {
-    Write-Error "Missing virtual environment at $venvPython. Run ..\setup.ps1 first."
+    Write-Error "Missing virtual environment at $venvPython. Run ..\..\setup.ps1 from the repo root first."
     exit 1
 }
 
