@@ -91,11 +91,13 @@ def _parse_seed(raw_seed: str) -> int:
         return 42
 
 
-def run_app(ui_mode: str | None = None, no_anim: bool = False, safe_ui: bool = False) -> None:
+def run_app(ui_mode: str | None = None, no_anim: bool = False, safe_ui: bool = False, debug: bool = False) -> None:
     from shinon_os.app_service import AppOptions, AppService
     from shinon_os.ui.factory import create_ui
 
-    service = AppService(AppOptions(ui_mode=ui_mode, no_anim=no_anim, safe_ui=safe_ui))
+    if debug:
+        print("[SHINON DEBUG MODE] Starting with debug protocol...")
+    service = AppService(AppOptions(ui_mode=ui_mode, no_anim=no_anim, safe_ui=safe_ui, debug=debug))
     try:
         session = create_ui(service)
         session.run(service)

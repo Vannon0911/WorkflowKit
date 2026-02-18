@@ -29,6 +29,7 @@ class AppOptions:
     ui_mode: str | None = None
     no_anim: bool = False
     safe_ui: bool = False
+    debug: bool = False
 
 
 def _textual_available() -> bool:
@@ -44,6 +45,7 @@ class AppService:
     def __init__(self, options: AppOptions, app: ShinonApp | None = None) -> None:
         self.options = options
         self.app = app or ShinonApp()
+        self.debug_mode = options.debug
         set_lang(self.app.repo.get_language())
         self.capabilities = CapabilityRegistry(
             textual_available=_textual_available(),
@@ -51,6 +53,8 @@ class AppService:
             safe_mode=options.safe_ui,
             palette="oled",
         )
+        if self.debug_mode:
+            self.app.logger.debug({"mode": "DEBUG", "msg": "Debug mode enabled", "options": str(options)})
 
     def shutdown(self) -> None:
         self.app.shutdown()
@@ -255,9 +259,13 @@ class AppService:
 
     def handle_input(self, text: str) -> OSResponse:
         raw = text or ""
+        if self.debug_mode:
+            print(f"[DEBUG INPUT] raw_input='{raw}' len={len(raw)} stripped='{raw.strip()}'")
         try:
             response = self.app.process_command(raw)
-            self.app.logger.debug({"where": "app_service.handle", "raw": raw, "turn_advanced": response.turn_advanced})
+            if self.debug_mode:
+                print(f"[DEBUG RESPONSE] turn_advanced={response.turn_advanced} view={response.current_view} output_len={len(response.output)}")
+            self.app.logger.debug({"where": "app_service.handle", "raw": raw, "turn_advanced": response.turn_advanced, "debug": self.debug_mode})
             view_model = self._select_view_model(response.current_view, raw)
             friendly_message = response.output
             raw_lower = raw.strip().lower()

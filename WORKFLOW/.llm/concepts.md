@@ -22,3 +22,4 @@ C-0015 | 2026-02-18 | CP-0023 | Transcript ownership split: SHINON keeps gamepla
 C-0016 | 2026-02-18 | CP-0024 | Introduce locale-keyed content model (with fallback labels), persisted unlock state, and collapse-gated emergency policy surface while keeping command syntax stable | I-0016
 C-0017 | 2026-02-18 | CP-0025 | Step-atomic governance flow: every mutation is immediately mirrored into trace/changes/change_map/current before the next mutation | I-0017
 C-0018 | 2026-02-18 | CP-0026 | Project audit validates zero critical bugs, complete game mechanics, deterministic reproducibility, and player agency balance across 31-test suite | I-0017, D-0019
+C-0019 | 2026-02-19 | CP-0027 | Debug mode with terminal I/O logging and 20-crash test suite ensures UI stability against invalid/edge-case inputs before public release | I-0018, D-0020

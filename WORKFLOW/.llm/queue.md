@@ -34,5 +34,6 @@ Q-0015 | IMPLEMENTED | Copilot-Transkripte vom SHINON-Runtime-System trennen und
 Q-0016 | IMPLEMENTED | Gesamt-MVP: DE/EN Locale-Runtime, Unlock/Collapse Gameplay, Standalone-Locale-Audit und Workflow-Hardening | codex | I-0016, C-0016, D-0017, CHG-0022
 Q-0017 | IMPLEMENTED | .llm Sofort-Dokumentation als Agenten-Systemstandard | codex | I-0017, C-0017, D-0018, CHG-0023
 Q-0018 | IMPLEMENTED | Umfassendes Projekt-Audit: 31/31 Tests, Gameplay-Substanz, Logik-Validierung und Bericht | codex | I-0017, C-0017, D-0018, CHG-0024
+Q-0019 | IMPLEMENTED | UI/UX Stabilisierung: Debug-Mode, Crash-Test-Suite und Input-Validierung | codex | I-0018, C-0018, D-0019, CHG-0025
 
-Next available ID: Q-0019
+Next available ID: Q-0020

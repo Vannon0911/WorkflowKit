@@ -100,3 +100,9 @@ MAP-0089 | 2026-02-18 | CP-0025 | CHG-0023 | backup.cmd | FILE_SCOPE | ADD | Ret
 MAP-0090 | 2026-02-18 | CP-0025 | CHG-0023 | README.md | Versioning automation + Backup automation sections | UPDATE | Retroactively mapped user-facing documentation for new version/backup scripts and usage rules
 MAP-0091 | 2026-02-18 | CP-0026 | CHG-0024 | PROJECT_AUDIT_REPORT.md | FILE_SCOPE | ADD | Added comprehensive system audit report covering governance, subsystem validation, edge case testing, balance analysis and recommendations
 MAP-0092 | 2026-02-18 | CP-0026 | CHG-0024 | WORKFLOW/.llm/audit.md | verification results | UPDATE | Recorded audit completion with all tests passed and design validation confirmed
+MAP-0093 | 2026-02-19 | CP-0027 | CHG-0025 | PROJECT/src/shinon_os/__main__.py | main/argument parser | UPDATE | Added --debug flag for terminal input protocol logging
+MAP-0094 | 2026-02-19 | CP-0027 | CHG-0025 | PROJECT/src/shinon_os/app.py | run_app function | UPDATE | Added debug parameter forwarding to AppService
+MAP-0095 | 2026-02-19 | CP-0027 | CHG-0025 | PROJECT/src/shinon_os/app_service.py | AppOptions/AppService/handle_input | UPDATE | Added debug mode flag, debug console logging for inputs/responses, and conditional debug output
+MAP-0096 | 2026-02-19 | CP-0027 | CHG-0025 | PROJECT/tests/test_crash_suite.py | FILE_SCOPE | ADD | Added 20-test crash resilience suite covering input validation (5), policy limits (4), unknown commands (3), view commands (11), locale (3), quit (2), sequential (2)
+MAP-0097 | 2026-02-19 | CP-0027 | CHG-0025 | PROJECT/DEBUG_PROTOCOL.md | FILE_SCOPE | ADD | Added comprehensive debug protocol guide with usage examples, test scenarios, and terminal monitoring patterns
+MAP-0098 | 2026-02-19 | CP-0027 | CHG-0025 | PROJECT/test_debug_protocol.py | FILE_SCOPE | ADD | Added standalone debug protocol test executable demonstrating debug mode functionality

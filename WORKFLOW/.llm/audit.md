@@ -28,3 +28,4 @@ A-0023 | CP-0023 | OK | SHINON-runtime enthält keine Transcript-Logik mehr; Cop
 A-0024 | CP-0024 | OK | DE/EN Locale-Runtime, Unlock/Cooldown/Collapse-Mechanik, neue Commands und Datenpfade umgesetzt; pytest grün und Audit (mono+standalone) mit Locale-Pflicht erfolgreich
 A-0025 | CP-0025 | OK | Governance-Standard auf Sofort-Dokumentation pro mutierendem Arbeitsschritt umgestellt (agent-only), Read-only Ausnahmen und retroaktive Nachdokumentation offener lokaler Aenderungen konsistent eingetragen
 A-0026 | CP-0026 | OK | Umfassendes Projekt-Audit (31/31 Tests erfolgreich): Spiel-Substanz verifiziert (6D-Welt, 15 Policies, 3 Sektoren, 15 Events), Kernlogik konsistent, keine Fehler, Determinismus bestätigt, Balancing kalibriert, Audit-Report bereitgestellt mit Empfehlungen
+A-0027 | CP-0027 | OK | UI/UX Stabilisierung: Debug-Mode with Terminal-Logging, 20-Test Crash-Suite (Input-Validation, Limits, Edge-Cases), 51/51 Tests bestanden, Debug-Protokoll dokumentiert

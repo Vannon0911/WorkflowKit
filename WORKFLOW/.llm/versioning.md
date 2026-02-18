@@ -29,3 +29,4 @@ V-0022 | 2026-02-18 | CP-0023 | 24 | 18 | 17 | Removed SHINON transcript couplin
 V-0023 | 2026-02-18 | CP-0024 | 25 | 19 | 18 | Added DE/EN locale runtime, unlock/collapse gameplay extensions, locale-aware standalone export, and updated audit/test coverage
 V-0024 | 2026-02-18 | CP-0025 | 26 | 20 | 18 | Immediate .llm per-step documentation policy set as agent standard, with retroactive open-change coverage for README and backup/version tooling updates
 V-0025 | 2026-02-18 | CP-0026 | 27 | 21 | 19 | Comprehensive project audit: all 31 tests passing, game mechanics validated (6D world, 15 policies, 3 sectors, 15 events), no critical bugs found, determinism verified, balancing confirmed adequate
+V-0026 | 2026-02-19 | CP-0027 | 28 | 22 | 20 | UI/UX stabilization: debug mode with terminal I/O logging, 20-test crash suite (input validation, policy limits, edge cases, view commands, locale, quit, sequential), 51 total tests passing

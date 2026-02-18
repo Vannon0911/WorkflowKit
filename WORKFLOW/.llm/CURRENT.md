@@ -1,21 +1,21 @@
 ﻿# CURRENT
 
-checkpoint: CP-0026
+checkpoint: CP-0027
 status: DONE
-spec_rev: 27
-queue_rev: 21
-build_rev: 19
+spec_rev: 28
+queue_rev: 22
+build_rev: 20
 
 latest_ids:
-- I: I-0017
-- C: C-0017
-- D: D-0018
-- Q: Q-0018
-- CHG: CHG-0024
-- MAP: MAP-0091
-- V: V-0025
-- T: T-0026
-- A: A-0026
+- I: I-0018
+- C: C-0018
+- D: D-0019
+- Q: Q-0019
+- CHG: CHG-0025
+- MAP: MAP-0093
+- V: V-0026
+- T: T-0027
+- A: A-0027
 
 tail_defaults:
 - cold_log_tail_entries: 50

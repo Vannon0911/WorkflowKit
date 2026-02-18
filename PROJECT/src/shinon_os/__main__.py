@@ -10,8 +10,9 @@ def main() -> None:
     parser.add_argument("--ui", choices=["textual", "plain"], default=None)
     parser.add_argument("--no-anim", action="store_true", help="Disable boot/idle animations")
     parser.add_argument("--safe-ui", action="store_true", help="Force plain fallback UI")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging for user inputs and system events")
     args = parser.parse_args()
-    run_app(ui_mode=args.ui, no_anim=args.no_anim, safe_ui=args.safe_ui)
+    run_app(ui_mode=args.ui, no_anim=args.no_anim, safe_ui=args.safe_ui, debug=args.debug)
 
 
 if __name__ == "__main__":
