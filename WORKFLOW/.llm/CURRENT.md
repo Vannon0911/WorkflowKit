@@ -1,10 +1,12 @@
 ﻿# CURRENT
 
 checkpoint: CP-0027
-status: DONE
+status: STABLE_PRODUCTION_READY
 spec_rev: 28
 queue_rev: 22
 build_rev: 20
+entry_point: main.py (--debug flag enabled)
+backup_date: 2026-02-19
 
 latest_ids:
 - I: I-0018
