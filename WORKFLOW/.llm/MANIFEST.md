@@ -1,4 +1,4 @@
-﻿# MANIFEST
+# MANIFEST
 
 Read order:
 1. state.json
@@ -13,6 +13,12 @@ Hot files (always read):
 - PROTOCOL.md
 - CURRENT.md
 - queue.md
+
+Mutation-active governance files (must be updated immediately for mutating steps):
+- trace.md
+- changes.md
+- change_map.md
+- CURRENT.md
 
 Cold files (tail-read by default):
 - decisions.md

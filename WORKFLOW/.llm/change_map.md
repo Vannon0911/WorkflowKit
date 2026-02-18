@@ -88,3 +88,13 @@ MAP-0077 | 2026-02-18 | CP-0024 | CHG-0022 | README.md | language/export/audit u
 MAP-0078 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/README.md | UI command notes section | UPDATE | Added language-select and unlock/goals/intel command guidance for operators
 MAP-0079 | 2026-02-18 | CP-0024 | CHG-0022 | WORKFLOW/README.md | standalone locale requirement note | UPDATE | Added explicit locale artifact requirement for standalone audit mode
 MAP-0080 | 2026-02-18 | CP-0024 | CHG-0022 | WORKFLOW/check/README.md | validated areas list | UPDATE | Added locale validation coverage details for monorepo and standalone modes
+MAP-0081 | 2026-02-18 | CP-0025 | CHG-0023 | WORKFLOW/.llm/PROTOCOL.md | mutating-step sequence rules | UPDATE | Added immediate per-step documentation order and prohibition on starting next mutation early
+MAP-0082 | 2026-02-18 | CP-0025 | CHG-0023 | WORKFLOW/.llm/LLM_RULES.md | System defaults + Invariants + LLM compliance | UPDATE | Formalized agent-only immediate documentation policy with read-only exemption and retroactive-open-change requirement
+MAP-0083 | 2026-02-18 | CP-0025 | CHG-0023 | WORKFLOW/.llm/MANIFEST.md | Mutation-active governance files section | UPDATE | Declared trace/changes/change_map/current as mandatory live files during mutating work
+MAP-0084 | 2026-02-18 | CP-0025 | CHG-0023 | WORKFLOW/.llm/state.json | checkpoint/revision fields + doc policy keys | UPDATE | Advanced CP/spec/queue/step and persisted immediate-doc mode metadata
+MAP-0085 | 2026-02-18 | CP-0025 | CHG-0023 | WORKFLOW/.llm/CURRENT.md | checkpoint/revision snapshot + latest IDs | UPDATE | Synced current governance snapshot with CP-0025 and latest I/C/D/Q/CHG/MAP/V/T/A pointers
+MAP-0086 | 2026-02-18 | CP-0025 | CHG-0023 | version.ps1 | FILE_SCOPE | ADD | Retroactively documented version automation flow (semver sync, clean-tree guard, commit+tag policy)
+MAP-0087 | 2026-02-18 | CP-0025 | CHG-0023 | version.cmd | FILE_SCOPE | ADD | Retroactively documented cmd wrapper entrypoint for version.ps1
+MAP-0088 | 2026-02-18 | CP-0025 | CHG-0023 | backup.ps1 | FILE_SCOPE | ADD | Retroactively documented clean snapshot backup flow with exclusions and auto-increment naming
+MAP-0089 | 2026-02-18 | CP-0025 | CHG-0023 | backup.cmd | FILE_SCOPE | ADD | Retroactively documented cmd wrapper entrypoint for backup.ps1
+MAP-0090 | 2026-02-18 | CP-0025 | CHG-0023 | README.md | Versioning automation + Backup automation sections | UPDATE | Retroactively mapped user-facing documentation for new version/backup scripts and usage rules

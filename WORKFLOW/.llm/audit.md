@@ -26,3 +26,4 @@ A-0021 | CP-0021 | OK | Symbol-Level Traceability und maschineller Audit-Check a
 A-0022 | CP-0022 | OK | PROJECT runtime auf .llm-Unabhängigkeit geprüft/erzwungen; Session-Transkripte (JSON+TXT) werden bei Quit und Error best-effort in User-DOCS persistiert
 A-0023 | CP-0023 | OK | SHINON-runtime enthält keine Transcript-Logik mehr; Copilot-Transkripte laufen separat über Workflow-Tool und sind auditierbar dokumentiert
 A-0024 | CP-0024 | OK | DE/EN Locale-Runtime, Unlock/Cooldown/Collapse-Mechanik, neue Commands und Datenpfade umgesetzt; pytest grün und Audit (mono+standalone) mit Locale-Pflicht erfolgreich
+A-0025 | CP-0025 | OK | Governance-Standard auf Sofort-Dokumentation pro mutierendem Arbeitsschritt umgestellt (agent-only), Read-only Ausnahmen und retroaktive Nachdokumentation offener lokaler Aenderungen konsistent eingetragen

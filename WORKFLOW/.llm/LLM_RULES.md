@@ -1,4 +1,4 @@
-﻿# LLM_RULES
+# LLM_RULES
 
 Source of truth:
 - WORKFLOW/.llm
@@ -22,6 +22,12 @@ Mandatory files:
 - PROJECT/src/shinon_os/data/de.json
 - PROJECT/src/shinon_os/data/en.json
 
+System defaults:
+- doc_granularity = per_step
+- doc_enforcement = agent_only
+- reads_exempt = true
+- retroactive_open_changes = true
+
 Invariants:
 - WORKFLOW/.llm is the only source of truth.
 - state.json is authoritative for checkpoint and revision counters.
@@ -29,6 +35,9 @@ Invariants:
 - audit.md is append-only.
 - IMPLEMENTED entries must reference Q-IDs.
 - Every code-relevant CHG entry (from enforcement checkpoint onward) must have one or more MAP entries in change_map.md.
+- Every mutating work step requires immediate .llm documentation in trace.md, changes.md, change_map.md (if enforced) and CURRENT.md.
+- Read-only operations are exempt from immediate documentation.
+- Retroactive documentation is required for currently open local changes.
 - No secrets in any repository file.
 
 Revision discipline:
@@ -53,3 +62,4 @@ I/O policy:
 LLM compliance:
 - Every response must state whether the workflow is consistent.
 - LLM must refuse to continue when LLM_RULES are violated.
+- LLM must not execute a second mutating step before immediate documentation of the first mutating step is complete.

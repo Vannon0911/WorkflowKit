@@ -20,3 +20,4 @@ C-0013 | 2026-02-18 | CP-0021 | Introduce enforced CHG->MAP symbol mapping with 
 C-0014 | 2026-02-18 | CP-0022 | Session transcript writer in LOCALAPPDATA docs with JSON+TXT dual output and best-effort crash finalization | I-0014
 C-0015 | 2026-02-18 | CP-0023 | Transcript ownership split: SHINON keeps gameplay runtime only, Copilot transcripts handled by dedicated workflow tool with append lifecycle | I-0015
 C-0016 | 2026-02-18 | CP-0024 | Introduce locale-keyed content model (with fallback labels), persisted unlock state, and collapse-gated emergency policy surface while keeping command syntax stable | I-0016
+C-0017 | 2026-02-18 | CP-0025 | Step-atomic governance flow: every mutation is immediately mirrored into trace/changes/change_map/current before the next mutation | I-0017

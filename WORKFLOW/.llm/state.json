@@ -1,11 +1,14 @@
 {
   "project": "SHINON_ALPHA_WORLD",
-  "checkpoint": "CP-0024",
+  "checkpoint": "CP-0025",
   "status": "DONE",
-  "spec_rev": 25,
-  "queue_rev": 19,
+  "spec_rev": 26,
+  "queue_rev": 20,
   "build_rev": 18,
-  "step": 32,
+  "step": 33,
   "base_build": "none",
-  "must_read_all_llm_files": false
+  "must_read_all_llm_files": false,
+  "immediate_doc_mode": "per_step",
+  "doc_enforcement": "agent_only",
+  "retroactive_open_changes": true
 }

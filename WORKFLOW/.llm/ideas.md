@@ -20,3 +20,4 @@ I-0013 | 2026-02-18 | CP-0021 | Enforce symbol-level workflow traceability and m
 I-0014 | 2026-02-18 | CP-0022 | Guarantee project runtime independence from .llm and auto-export session transcripts to user docs | Ensure fresh-system operability and persistent operator trace outside repository writes
 I-0015 | 2026-02-18 | CP-0023 | Decouple transcripts from SHINON runtime and manage Copilot/ChatGPT transcripts as a separate workflow tool | Keep PROJECT domain-pure while preserving full session documentation outside app runtime
 I-0016 | 2026-02-18 | CP-0024 | Add DE/EN runtime localization with unlock/collapse gameplay loop extensions and standalone locale-safe workflow export | Deliver gameplay depth while preserving monorepo and standalone audit guarantees
+I-0017 | 2026-02-18 | CP-0025 | Enforce immediate .llm documentation for every mutating work step while keeping read-only exploration free | Raises governance trace quality without adding hard runtime blockers

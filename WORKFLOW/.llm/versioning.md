@@ -27,3 +27,4 @@ V-0020 | 2026-02-18 | CP-0021 | 22 | 16 | 15 | Added mandatory symbol-level chan
 V-0021 | 2026-02-18 | CP-0022 | 23 | 17 | 16 | Enforced runtime independence from WORKFLOW/.llm and added dual-format session transcripts in LOCALAPPDATA docs with tests
 V-0022 | 2026-02-18 | CP-0023 | 24 | 18 | 17 | Removed SHINON transcript coupling and introduced standalone Copilot transcript tool with audit coverage
 V-0023 | 2026-02-18 | CP-0024 | 25 | 19 | 18 | Added DE/EN locale runtime, unlock/collapse gameplay extensions, locale-aware standalone export, and updated audit/test coverage
+V-0024 | 2026-02-18 | CP-0025 | 26 | 20 | 18 | Immediate .llm per-step documentation policy set as agent standard, with retroactive open-change coverage for README and backup/version tooling updates

@@ -32,5 +32,6 @@ Q-0013 | IMPLEMENTED | Workflow-Trace-Regel auf Symbol-Ebene + automatischer Aud
 Q-0014 | IMPLEMENTED | Systemprüfung ohne .llm Runtime-Kopplung + automatische Session-Transkripte in User-DOCS | codex | I-0014, C-0014, D-0015, CHG-0020
 Q-0015 | IMPLEMENTED | Copilot-Transkripte vom SHINON-Runtime-System trennen und als eigenes Workflow-Tool führen | codex | I-0015, C-0015, D-0016, CHG-0021
 Q-0016 | IMPLEMENTED | Gesamt-MVP: DE/EN Locale-Runtime, Unlock/Collapse Gameplay, Standalone-Locale-Audit und Workflow-Hardening | codex | I-0016, C-0016, D-0017, CHG-0022
+Q-0017 | IMPLEMENTED | .llm Sofort-Dokumentation als Agenten-Systemstandard | codex | I-0017, C-0017, D-0018, CHG-0023
 
-Next available ID: Q-0017
+Next available ID: Q-0018
