@@ -7,11 +7,11 @@ Repository split:
 Workflowkit goals:
 - Prevent process drift.
 - Enable complete and reproducible documentation.
-- Preserve versioned intermediate steps (ideas, concepts, audits, trace).
-- Keep storage LLM-friendly and machine-parseable.
+- Preserve versioned intermediate steps (ideas, concepts, changes, audits).
+- Minimize I/O load with manifest + snapshot + tail-read strategy.
 
 Execution model:
 - WORKFLOW/.llm is the only source of truth.
 - state.json anchors checkpoint and revision counters.
-- ideas.md -> concepts.md -> queue.md -> implementation forms the chain.
+- ideas.md -> concepts.md -> queue.md -> changes.md -> implementation forms the chain.
 - trace.md and audit.md are append-only historical logs.
