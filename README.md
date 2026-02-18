@@ -39,3 +39,6 @@ Copilot transcripts:
 - Tool: `WORKFLOW/tools/copilot_transcript.ps1`
 - Saved to `%LOCALAPPDATA%/copilot_docs/transcripts`
 - Written as `.json` and `.txt`
+
+Workflow-Framework extrahieren:
+- `python WORKFLOW/tools/extract_workflow_repo.py --target ../WorkflowKit-Framework --init-git`

@@ -19,3 +19,7 @@ Copilot transcript tooling (separate from PROJECT runtime):
 - Script: `WORKFLOW/tools/copilot_transcript.ps1`
 - Storage path: `%LOCALAPPDATA%/copilot_docs/transcripts`
 - Formats: `.json` and `.txt`
+
+Standalone nutzen (ohne PROJECT):
+- `python check/audit_check.py --standalone`
+- Optional: `python tools/extract_workflow_repo.py --target ../WorkflowKit-Framework --init-git`

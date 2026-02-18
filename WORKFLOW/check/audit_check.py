@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from argparse import ArgumentParser
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -29,8 +30,9 @@ class MapRow:
     rationale: str
 
 
-ROOT = Path(__file__).resolve().parents[2]
-WORKFLOW_DIR = ROOT / "WORKFLOW"
+AUDIT_FILE = Path(__file__).resolve()
+WORKFLOW_DIR = AUDIT_FILE.parents[1]
+ROOT = WORKFLOW_DIR.parent if WORKFLOW_DIR.name == "WORKFLOW" else WORKFLOW_DIR
 LLM_DIR = WORKFLOW_DIR / ".llm"
 PROJECT_DIR = ROOT / "PROJECT"
 TEMP_DIR = WORKFLOW_DIR / "check" / "temp"
@@ -176,6 +178,10 @@ def check_sequence(nums: list[int], label: str, errors: list[str]) -> None:
 
 
 def main() -> int:
+    parser = ArgumentParser(description="Workflow audit check")
+    parser.add_argument("--standalone", action="store_true", help="Skip PROJECT checks if set")
+    args = parser.parse_args()
+
     errors: list[str] = []
     parse_errors: list[str] = []
 
@@ -193,6 +199,7 @@ def main() -> int:
         check_sequence([r.map_num for r in map_rows], "MAP", errors)
 
         chg_ids = {r.chg_id for r in changes}
+        project_present = PROJECT_DIR.exists() and not args.standalone
         deleted_files_by_map: dict[str, list[int]] = {}
         for row in map_rows:
             if row.action == "DELETE":
@@ -204,8 +211,26 @@ def main() -> int:
                 errors.append(f"MAP references unknown CHG: {row.chg_id}")
             map_by_chg.setdefault(row.chg_id, []).append(row)
             if row.action != "DELETE":
+                if not project_present and (
+                    row.file.startswith("PROJECT/") or row.file.startswith("setup.ps1")
+                ):
+                    continue
                 target = ROOT / row.file
                 if not target.exists():
+                    # standalone fallback: strip leading WORKFLOW/ or PROJECT/
+                    rel_path = Path(row.file)
+                    alt: Path | None = None
+                    if rel_path.parts and rel_path.parts[0] == "WORKFLOW":
+                        alt = WORKFLOW_DIR / Path(*rel_path.parts[1:])
+                    elif rel_path.parts and rel_path.parts[0] == "PROJECT" and not project_present:
+                        alt = None  # skip existence check for project files when standalone
+                    if alt and alt.exists():
+                        target = alt
+                    elif alt is None and rel_path.parts and rel_path.parts[0] == "PROJECT" and not project_present:
+                        target = None
+                    else:
+                        target = None
+                if target is None or (target and not target.exists()):
                     deleted_later = any(n > row.map_num for n in deleted_files_by_map.get(row.file, []))
                     if not deleted_later:
                         errors.append(f"MAP file does not exist: {row.file}")
@@ -231,29 +256,30 @@ def main() -> int:
                 if q_chg not in chg_ids:
                     errors.append(f"Queue references unknown CHG: {q_chg}")
 
-        requirements_text = read_text(PROJECT_DIR / "requirements.txt")
-        if "-c constraints.lock.txt" not in requirements_text:
-            errors.append("requirements.txt must include '-c constraints.lock.txt'")
-
-        lock_packages = parse_constraints(PROJECT_DIR / "constraints.lock.txt")
-        for required_pkg in ("pytest", "textual", "rich"):
-            if required_pkg not in lock_packages:
-                errors.append(f"constraints.lock.txt missing required package: {required_pkg}")
-
-        setup_text = read_text(ROOT / "setup.ps1")
-        if "constraints.lock.txt" not in setup_text:
-            errors.append("setup.ps1 must enforce dependency lock file")
-
         copilot_transcript_tool = WORKFLOW_DIR / "tools" / "copilot_transcript.ps1"
         if not copilot_transcript_tool.exists():
             errors.append("Missing copilot transcript tool: WORKFLOW/tools/copilot_transcript.ps1")
 
-        workflow_ref_pattern = re.compile(r"WORKFLOW[\\/]\.llm", flags=re.IGNORECASE)
-        for py_file in (PROJECT_DIR / "src").rglob("*.py"):
-            text = py_file.read_text(encoding="utf-8")
-            if workflow_ref_pattern.search(text):
-                rel = py_file.relative_to(ROOT)
-                errors.append(f"Runtime code must not reference WORKFLOW/.llm: {rel}")
+        if project_present:
+            requirements_text = read_text(PROJECT_DIR / "requirements.txt")
+            if "-c constraints.lock.txt" not in requirements_text:
+                errors.append("requirements.txt must include '-c constraints.lock.txt'")
+
+            lock_packages = parse_constraints(PROJECT_DIR / "constraints.lock.txt")
+            for required_pkg in ("pytest", "textual", "rich"):
+                if required_pkg not in lock_packages:
+                    errors.append(f"constraints.lock.txt missing required package: {required_pkg}")
+
+            setup_text = read_text(ROOT / "setup.ps1")
+            if "constraints.lock.txt" not in setup_text:
+                errors.append("setup.ps1 must enforce dependency lock file")
+
+            workflow_ref_pattern = re.compile(r"WORKFLOW[\\/]\.llm", flags=re.IGNORECASE)
+            for py_file in (PROJECT_DIR / "src").rglob("*.py"):
+                text = py_file.read_text(encoding="utf-8")
+                if workflow_ref_pattern.search(text):
+                    rel = py_file.relative_to(ROOT)
+                    errors.append(f"Runtime code must not reference WORKFLOW/.llm: {rel}")
 
     except ParseError as exc:
         parse_errors.append(str(exc))
