@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from shinon_os.i18n import t
 from shinon_os.sim.model import MarketGood, SectorState, WorldState
 from shinon_os.sim.worldgen import EventDefinition
 from shinon_os.util.rng import seeded_rng
@@ -90,6 +91,6 @@ def apply_event(
 
     return {
         "id": event.event_id,
-        "label": event.label,
-        "description": event.description,
+        "label": t(event.label_key) if event.label_key else event.label,
+        "description": t(event.description_key) if event.description_key else event.description,
     }

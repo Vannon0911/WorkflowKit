@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from shinon_os.core import intents
 from shinon_os.core.types import Intent, Plan, StanceState
+from shinon_os.i18n import t
 
 
 def _policy_utility(policy_id: str, stance: StanceState, observations: dict[str, object]) -> float:
@@ -19,6 +20,13 @@ def _policy_utility(policy_id: str, stance: StanceState, observations: dict[str,
         "BUILD_INFRA": (0.8 * shortages, 1.3, 0.7),
         "WORK_HOURS_REFORM": (1.0 * unrest_risk, 0.8, 0.5),
         "IMPORT_PROGRAM": (1.8 * shortages + 0.4 * inflation, 0.3, 1.4),
+        "PRICE_STABILIZER": (0.9 * inflation + 0.5 * shortages, 0.5, 0.7),
+        "LOGISTICS_PUSH": (1.1 * shortages, 1.2, 0.5),
+        "INDUSTRIAL_MODERNIZATION": (0.6 * shortages, 1.3, 0.4),
+        "STRATEGIC_RESERVE": (1.4 * shortages, 0.6, 0.8),
+        "SOCIAL_COMPACT": (1.0 * unrest_risk, 0.4, 0.9),
+        "SOS_CREDIT": (2.2 * fiscal_risk, 0.2, 2.0),
+        "RATIONING_PLUS": (2.0 * shortages + unrest_risk, 0.1, 1.8),
     }
     control_gain, growth_gain, survival_gain = heuristics.get(policy_id, (0.3, 0.3, 0.3))
     return (
@@ -30,16 +38,23 @@ def _policy_utility(policy_id: str, stance: StanceState, observations: dict[str,
 
 def _predictive_note(policy_id: str) -> str:
     notes = {
-        "TAX_ADJUST": "Expected effect: treasury up, social pressure up if magnitude positive.",
-        "SUBSIDY_SECTOR": "Expected effect: output lift in target sector, recurring fiscal cost.",
-        "FUND_RESEARCH": "Expected effect: tech growth and slower long-term inflation pressure.",
-        "BUILD_INFRA": "Expected effect: delayed capacity gain after construction phase.",
-        "SECURITY_BUDGET": "Expected effect: unrest down quickly, prosperity drag possible.",
-        "RATIONING": "Expected effect: shortage unrest dampened, prosperity reduced.",
-        "WORK_HOURS_REFORM": "Expected effect: stability up, aggregate output slightly down.",
-        "IMPORT_PROGRAM": "Expected effect: targeted supply relief against treasury outflow.",
+        "TAX_ADJUST": t("plan.note.tax_adjust"),
+        "SUBSIDY_SECTOR": t("plan.note.subsidy_sector"),
+        "FUND_RESEARCH": t("plan.note.fund_research"),
+        "BUILD_INFRA": t("plan.note.build_infra"),
+        "SECURITY_BUDGET": t("plan.note.security_budget"),
+        "RATIONING": t("plan.note.rationing"),
+        "WORK_HOURS_REFORM": t("plan.note.work_hours_reform"),
+        "IMPORT_PROGRAM": t("plan.note.import_program"),
+        "PRICE_STABILIZER": t("plan.note.price_stabilizer"),
+        "LOGISTICS_PUSH": t("plan.note.logistics_push"),
+        "INDUSTRIAL_MODERNIZATION": t("plan.note.industrial_modernization"),
+        "STRATEGIC_RESERVE": t("plan.note.strategic_reserve"),
+        "SOCIAL_COMPACT": t("plan.note.social_compact"),
+        "SOS_CREDIT": t("plan.note.sos_credit"),
+        "RATIONING_PLUS": t("plan.note.rationing_plus"),
     }
-    return notes.get(policy_id, "Expected effect: uncertain.")
+    return notes.get(policy_id, t("plan.note.uncertain"))
 
 
 def create_plan(
@@ -59,16 +74,27 @@ def create_plan(
         selected = str(intent.args.get("policy_id", "UNKNOWN"))
         return Plan(
             acts=["CONFIRM", "INFORM"],
-            status_line=f"Action pipeline armed for {selected}",
+            status_line=t("plan.status.armed", policy_id=selected),
             recommendations=recommendations,
             predicted_impact=_predictive_note(selected),
-            options=["dashboard", "market", "policies", "history", "explain prices"],
+            options=["dashboard", "market", "policies", "history", "explain prices", "unlock list", "show goals", "intel"],
         )
 
     return Plan(
         acts=["INFORM", "RECOMMEND"],
-        status_line="Kernel monitoring mode; no turn advancement.",
+        status_line=t("plan.status.monitoring"),
         recommendations=recommendations,
-        predicted_impact="No simulation advance on view commands.",
-        options=["dashboard", "market", "policies", "industry", "history", "explain prices", "enact <POLICY_ID> [magnitude] [target]"],
+        predicted_impact=t("plan.status.no_advance"),
+        options=[
+            "dashboard",
+            "market",
+            "policies",
+            "industry",
+            "history",
+            "explain prices",
+            "unlock list",
+            "show goals",
+            "intel",
+            "enact <POLICY_ID> [magnitude] [target]",
+        ],
     )

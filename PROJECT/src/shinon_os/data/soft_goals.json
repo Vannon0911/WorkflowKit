@@ -1,0 +1,26 @@
+[
+  {
+    "id": "goal.reserve_buffer",
+    "title_key": "goal.reserve_buffer.title",
+    "description_key": "goal.reserve_buffer.desc",
+    "metric": "treasury",
+    "target": 65000,
+    "operator": ">="
+  },
+  {
+    "id": "goal.low_unrest",
+    "title_key": "goal.low_unrest.title",
+    "description_key": "goal.low_unrest.desc",
+    "metric": "unrest",
+    "target": 22,
+    "operator": "<="
+  },
+  {
+    "id": "goal.tech_momentum",
+    "title_key": "goal.tech_momentum.title",
+    "description_key": "goal.tech_momentum.desc",
+    "metric": "tech_level",
+    "target": 45,
+    "operator": ">="
+  }
+]

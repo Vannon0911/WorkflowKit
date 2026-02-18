@@ -23,7 +23,7 @@ def test_command_compatibility_action_advances(tmp_path: Path) -> None:
     service = AppService(AppOptions(no_anim=True), app=app)
     service.app.start_new_game(seed=101)
     turn_before = service.app.current_turn()
-    resp = service.handle_input("Please fund research by 1.0 now")
+    resp = service.handle_input("enact TAX_ADJUST 0.05")
     assert resp.turn_advanced is True
     assert service.app.current_turn() == turn_before + 1
     service.shutdown()

@@ -1,6 +1,8 @@
 [
   {
     "id": "DROUGHT",
+    "label_key": "event.DROUGHT.label",
+    "description_key": "event.DROUGHT.desc",
     "label": "Drought",
     "description": "Water stress reduced agricultural yields.",
     "base_weight": 1.0,
@@ -12,6 +14,8 @@
   },
   {
     "id": "STRIKE",
+    "label_key": "event.STRIKE.label",
+    "description_key": "event.STRIKE.desc",
     "label": "Labor Strike",
     "description": "Work stoppages hit industry throughput.",
     "base_weight": 0.9,
@@ -23,6 +27,8 @@
   },
   {
     "id": "EPIDEMIC",
+    "label_key": "event.EPIDEMIC.label",
+    "description_key": "event.EPIDEMIC.desc",
     "label": "Epidemic Wave",
     "description": "Public health demand spikes and morale drops.",
     "base_weight": 0.8,
@@ -34,6 +40,8 @@
   },
   {
     "id": "FUEL_SHOCK",
+    "label_key": "event.FUEL_SHOCK.label",
+    "description_key": "event.FUEL_SHOCK.desc",
     "label": "Fuel Shock",
     "description": "Supply chain friction drove fuel costs upward.",
     "base_weight": 0.9,
@@ -46,6 +54,8 @@
   },
   {
     "id": "INNOVATION",
+    "label_key": "event.INNOVATION.label",
+    "description_key": "event.INNOVATION.desc",
     "label": "Innovation Breakout",
     "description": "A process innovation improved productivity expectations.",
     "base_weight": 0.7,
@@ -56,6 +66,8 @@
   },
   {
     "id": "ORE_SHORTAGE",
+    "label_key": "event.ORE_SHORTAGE.label",
+    "description_key": "event.ORE_SHORTAGE.desc",
     "label": "Ore Shortage",
     "description": "Mining disruptions reduced ore availability.",
     "base_weight": 0.8,
@@ -67,6 +79,8 @@
   },
   {
     "id": "BORDER_TARIFFS",
+    "label_key": "event.BORDER_TARIFFS.label",
+    "description_key": "event.BORDER_TARIFFS.desc",
     "label": "Border Tariffs",
     "description": "Trade barriers increased external procurement costs.",
     "base_weight": 0.7,
@@ -77,6 +91,8 @@
   },
   {
     "id": "HARVEST_BOOM",
+    "label_key": "event.HARVEST_BOOM.label",
+    "description_key": "event.HARVEST_BOOM.desc",
     "label": "Harvest Boom",
     "description": "A strong season lifted grain output.",
     "base_weight": 0.9,
@@ -88,6 +104,8 @@
   },
   {
     "id": "SOCIAL_MEDIA_PANIC",
+    "label_key": "event.SOCIAL_MEDIA_PANIC.label",
+    "description_key": "event.SOCIAL_MEDIA_PANIC.desc",
     "label": "Social Panic",
     "description": "A rumor cycle amplified social volatility.",
     "base_weight": 0.8,
@@ -98,6 +116,8 @@
   },
   {
     "id": "MEDICAL_BREAKTHROUGH",
+    "label_key": "event.MEDICAL_BREAKTHROUGH.label",
+    "description_key": "event.MEDICAL_BREAKTHROUGH.desc",
     "label": "Medical Breakthrough",
     "description": "A treatment advance expanded medicine supply.",
     "base_weight": 0.7,
@@ -105,6 +125,70 @@
     "effects": {
       "good_supply_mult": {"medicine": 0.30},
       "world_add": {"prosperity": 0.9, "tech_level": 0.8}
+    }
+  },
+  {
+    "id": "SUPPLY_CHAIN_GLITCH",
+    "label_key": "event.SUPPLY_CHAIN_GLITCH.label",
+    "description_key": "event.SUPPLY_CHAIN_GLITCH.desc",
+    "label": "Supply Chain Glitch",
+    "description": "Logistics node failure delayed industrial inputs.",
+    "base_weight": 0.9,
+    "conditions": {},
+    "effects": {
+      "good_supply_mult": {"tools": -0.18, "metal": -0.14},
+      "world_add": {"prosperity": -0.7}
+    }
+  },
+  {
+    "id": "HEAT_WAVE",
+    "label_key": "event.HEAT_WAVE.label",
+    "description_key": "event.HEAT_WAVE.desc",
+    "label": "Heat Wave",
+    "description": "Extreme weather reduced labor productivity.",
+    "base_weight": 0.8,
+    "conditions": {},
+    "effects": {
+      "sector_efficiency_mult": {"agriculture": -0.10, "services": -0.06},
+      "world_add": {"unrest": 0.8}
+    }
+  },
+  {
+    "id": "CONSUMER_BOYCOTT",
+    "label_key": "event.CONSUMER_BOYCOTT.label",
+    "description_key": "event.CONSUMER_BOYCOTT.desc",
+    "label": "Consumer Boycott",
+    "description": "Sentiment shock reduced demand for non-essentials.",
+    "base_weight": 0.7,
+    "conditions": {"world_min": {"unrest": 20}},
+    "effects": {
+      "good_demand_mult": {"tools": -0.16, "metal": -0.12},
+      "world_add": {"stability": -0.6, "prosperity": -0.5}
+    }
+  },
+  {
+    "id": "CREDIT_SQUEEZE",
+    "label_key": "event.CREDIT_SQUEEZE.label",
+    "description_key": "event.CREDIT_SQUEEZE.desc",
+    "label": "Credit Squeeze",
+    "description": "Market liquidity tightened and financing costs rose.",
+    "base_weight": 0.8,
+    "conditions": {},
+    "effects": {
+      "world_add": {"treasury": -1800.0, "stability": -0.8},
+      "good_price_mult": {"fuel": 0.10}
+    }
+  },
+  {
+    "id": "PUBLIC_CONFIDENCE_SWING",
+    "label_key": "event.PUBLIC_CONFIDENCE_SWING.label",
+    "description_key": "event.PUBLIC_CONFIDENCE_SWING.desc",
+    "label": "Public Confidence Swing",
+    "description": "Narrative shift moved social mood unexpectedly.",
+    "base_weight": 0.9,
+    "conditions": {},
+    "effects": {
+      "world_add": {"prosperity": 0.5, "unrest": -0.5}
     }
   }
 ]

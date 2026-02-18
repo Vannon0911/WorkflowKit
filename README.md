@@ -22,6 +22,8 @@ Manual run (from `PROJECT/`):
 - `python -m shinon_os` (Textual UI default)
 - `python -m shinon_os --safe-ui` to force plain fallback
 - `python -m shinon_os --no-anim` to disable boot/idle FX
+- Runtime language command: `lang de` or `lang en`
+- Gameplay helper commands: `unlock list`, `show goals`, `intel`
 
 Workflow traceability:
 - High-level file mapping: `WORKFLOW/.llm/changes.md`
@@ -42,3 +44,5 @@ Copilot transcripts:
 
 Workflow-Framework extrahieren:
 - `python WORKFLOW/tools/extract_workflow_repo.py --target ../WorkflowKit-Framework --init-git`
+- Export now includes locale files at `locales/de.json` and `locales/en.json`
+- Standalone audit in extracted repo: `python check/audit_check.py --standalone`

@@ -39,6 +39,7 @@ class KernelResponse:
     current_view: str
     turn_advanced: bool
     should_quit: bool = False
+    locale_changed: bool = False
     chat_turn: "ChatTurnModel | None" = None
 
 

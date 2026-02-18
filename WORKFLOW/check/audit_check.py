@@ -56,6 +56,14 @@ MANDATORY_FILES = [
     "PROTOCOL.md",
     "PROJECT_SUMMARY.md",
 ]
+MONOREPO_LOCALE_FILES = [
+    "PROJECT/src/shinon_os/data/de.json",
+    "PROJECT/src/shinon_os/data/en.json",
+]
+STANDALONE_LOCALE_FILES = [
+    "locales/de.json",
+    "locales/en.json",
+]
 
 
 def read_text(path: Path) -> str:
@@ -189,6 +197,11 @@ def main() -> int:
         missing = [f for f in MANDATORY_FILES if not (LLM_DIR / f).exists()]
         if missing:
             errors.append(f"Missing mandatory .llm files: {', '.join(missing)}")
+
+        locale_files = STANDALONE_LOCALE_FILES if args.standalone else MONOREPO_LOCALE_FILES
+        missing_locales = [f for f in locale_files if not (ROOT / f).exists()]
+        if missing_locales:
+            errors.append(f"Missing mandatory locale files: {', '.join(missing_locales)}")
 
         changes = parse_changes(LLM_DIR / "changes.md")
         enforce_from_chg, map_rows = parse_change_map(LLM_DIR / "change_map.md")

@@ -10,10 +10,10 @@ def test_chat_intent_auto_execute(tmp_path: Path) -> None:
     try:
         app.start_new_game(seed=100)
         turn_before = app.current_turn()
-        response = app.process_command("Please fund research by 1.0 now")
+        response = app.process_command("Please adjust tax by 0.05 now")
         assert response.turn_advanced is True
         assert app.current_turn() == turn_before + 1
         assert response.chat_turn is not None
-        assert response.chat_turn.executed_action == "FUND_RESEARCH"
+        assert response.chat_turn.executed_action == "TAX_ADJUST"
     finally:
         app.shutdown()

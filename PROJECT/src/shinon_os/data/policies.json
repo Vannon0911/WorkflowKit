@@ -1,6 +1,8 @@
 [
   {
     "id": "TAX_ADJUST",
+    "label_key": "policy.TAX_ADJUST.label",
+    "description_key": "policy.TAX_ADJUST.desc",
     "label": "Tax Adjustment",
     "description": "Adjust tax pressure. More taxes raise treasury income but hurt social metrics.",
     "target_type": "none",
@@ -16,6 +18,8 @@
   },
   {
     "id": "SUBSIDY_SECTOR",
+    "label_key": "policy.SUBSIDY_SECTOR.label",
+    "description_key": "policy.SUBSIDY_SECTOR.desc",
     "label": "Sector Subsidy",
     "description": "Boost output of one sector at recurring fiscal cost.",
     "target_type": "sector",
@@ -31,7 +35,27 @@
     "constraints": {"min_treasury": 3000}
   },
   {
+    "id": "IMPORT_PROGRAM",
+    "label_key": "policy.IMPORT_PROGRAM.label",
+    "description_key": "policy.IMPORT_PROGRAM.desc",
+    "label": "Import Program",
+    "description": "Inject targeted good supply in exchange for treasury outflow.",
+    "target_type": "good",
+    "cost": 1000,
+    "duration_ticks": 3,
+    "cooldown_ticks": 1,
+    "magnitude": {"min": 5.00, "max": 25.00, "step": 5.00, "default": 10.00},
+    "effects": {
+      "good_supply_add": {"target": 1.0},
+      "import_cost_per_unit": 40.0,
+      "world_add": {"unrest": -0.3}
+    },
+    "constraints": {"min_treasury": 3000}
+  },
+  {
     "id": "FUND_RESEARCH",
+    "label_key": "policy.FUND_RESEARCH.label",
+    "description_key": "policy.FUND_RESEARCH.desc",
     "label": "Fund Research",
     "description": "Raise technology growth with immediate and recurring cost.",
     "target_type": "none",
@@ -47,6 +71,8 @@
   },
   {
     "id": "BUILD_INFRA",
+    "label_key": "policy.BUILD_INFRA.label",
+    "description_key": "policy.BUILD_INFRA.desc",
     "label": "Build Infrastructure",
     "description": "Increase target sector capacity after a 2-turn construction delay.",
     "target_type": "sector",
@@ -64,6 +90,8 @@
   },
   {
     "id": "SECURITY_BUDGET",
+    "label_key": "policy.SECURITY_BUDGET.label",
+    "description_key": "policy.SECURITY_BUDGET.desc",
     "label": "Security Budget",
     "description": "Suppress unrest quickly with a long-run prosperity drag.",
     "target_type": "none",
@@ -79,6 +107,8 @@
   },
   {
     "id": "RATIONING",
+    "label_key": "policy.RATIONING.label",
+    "description_key": "policy.RATIONING.desc",
     "label": "Rationing Program",
     "description": "Contain shortage unrest at prosperity cost.",
     "target_type": "none",
@@ -94,6 +124,8 @@
   },
   {
     "id": "WORK_HOURS_REFORM",
+    "label_key": "policy.WORK_HOURS_REFORM.label",
+    "description_key": "policy.WORK_HOURS_REFORM.desc",
     "label": "Work Hours Reform",
     "description": "Improve stability but lower aggregate output.",
     "target_type": "none",
@@ -108,19 +140,127 @@
     "constraints": {"min_treasury": 1500}
   },
   {
-    "id": "IMPORT_PROGRAM",
-    "label": "Import Program",
-    "description": "Inject targeted good supply in exchange for treasury outflow.",
-    "target_type": "good",
-    "cost": 1000,
+    "id": "PRICE_STABILIZER",
+    "label_key": "policy.PRICE_STABILIZER.label",
+    "description_key": "policy.PRICE_STABILIZER.desc",
+    "label": "Price Stabilizer",
+    "description": "Reduce inflation spikes using fiscal reserves.",
+    "target_type": "none",
+    "cost": 1800,
     "duration_ticks": 3,
-    "cooldown_ticks": 1,
-    "magnitude": {"min": 5.00, "max": 25.00, "step": 5.00, "default": 10.00},
+    "cooldown_ticks": 3,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
     "effects": {
-      "good_supply_add": {"target": 1.0},
-      "import_cost_per_unit": 40.0,
-      "world_add": {"unrest": -0.3}
+      "good_price_mult": {"fuel": -0.08, "bread": -0.06, "medicine": -0.05},
+      "world_add": {"stability": 0.5},
+      "treasury_upkeep_per_turn": 650.0
+    },
+    "constraints": {"min_treasury": 4000}
+  },
+  {
+    "id": "LOGISTICS_PUSH",
+    "label_key": "policy.LOGISTICS_PUSH.label",
+    "description_key": "policy.LOGISTICS_PUSH.desc",
+    "label": "Logistics Push",
+    "description": "Improve supply-chain throughput across all sectors.",
+    "target_type": "none",
+    "cost": 2200,
+    "duration_ticks": 4,
+    "cooldown_ticks": 3,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "global_output_mult": 0.09,
+      "treasury_upkeep_per_turn": 700.0,
+      "world_add": {"prosperity": 0.5}
+    },
+    "constraints": {"min_treasury": 4500}
+  },
+  {
+    "id": "INDUSTRIAL_MODERNIZATION",
+    "label_key": "policy.INDUSTRIAL_MODERNIZATION.label",
+    "description_key": "policy.INDUSTRIAL_MODERNIZATION.desc",
+    "label": "Industrial Modernization",
+    "description": "Upgrade industrial efficiency for medium-term output gains.",
+    "target_type": "sector",
+    "cost": 3000,
+    "duration_ticks": 5,
+    "cooldown_ticks": 4,
+    "magnitude": {"min": 0.50, "max": 1.50, "step": 0.50, "default": 1.00},
+    "effects": {
+      "sector_efficiency_add": {"target": 0.14},
+      "world_add": {"tech_level": 0.8},
+      "treasury_upkeep_per_turn": 500.0
+    },
+    "constraints": {"min_treasury": 5500}
+  },
+  {
+    "id": "STRATEGIC_RESERVE",
+    "label_key": "policy.STRATEGIC_RESERVE.label",
+    "description_key": "policy.STRATEGIC_RESERVE.desc",
+    "label": "Strategic Reserve",
+    "description": "Build targeted stock buffers for volatile essentials.",
+    "target_type": "good",
+    "cost": 2000,
+    "duration_ticks": 3,
+    "cooldown_ticks": 3,
+    "magnitude": {"min": 5.00, "max": 20.00, "step": 5.00, "default": 10.00},
+    "effects": {
+      "good_supply_add": {"target": 1.1},
+      "import_cost_per_unit": 30.0,
+      "world_add": {"stability": 0.6}
+    },
+    "constraints": {"min_treasury": 3500}
+  },
+  {
+    "id": "SOCIAL_COMPACT",
+    "label_key": "policy.SOCIAL_COMPACT.label",
+    "description_key": "policy.SOCIAL_COMPACT.desc",
+    "label": "Social Compact",
+    "description": "Trade short-term treasury for social cohesion gains.",
+    "target_type": "none",
+    "cost": 1700,
+    "duration_ticks": 4,
+    "cooldown_ticks": 3,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "world_add": {"unrest": -1.6, "stability": 1.0, "prosperity": 0.4},
+      "treasury_upkeep_per_turn": 550.0
     },
     "constraints": {"min_treasury": 3000}
+  },
+  {
+    "id": "SOS_CREDIT",
+    "label_key": "policy.SOS_CREDIT.label",
+    "description_key": "policy.SOS_CREDIT.desc",
+    "label": "SOS Credit Line",
+    "description": "Emergency liquidity injection with heavy stability penalty.",
+    "target_type": "none",
+    "cost": 0,
+    "duration_ticks": 2,
+    "cooldown_ticks": 4,
+    "magnitude": {"min": 1.00, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "world_add": {"treasury": 8500.0, "stability": -2.0, "prosperity": -0.8},
+      "treasury_upkeep_per_turn": 950.0
+    },
+    "constraints": {"min_treasury": -999999}
+  },
+  {
+    "id": "RATIONING_PLUS",
+    "label_key": "policy.RATIONING_PLUS.label",
+    "description_key": "policy.RATIONING_PLUS.desc",
+    "label": "Emergency Rationing",
+    "description": "Strongly suppress unrest during collapse at social cost.",
+    "target_type": "none",
+    "cost": 300,
+    "duration_ticks": 3,
+    "cooldown_ticks": 3,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "world_add": {"unrest": -2.8, "prosperity": -1.6},
+      "shortage_unrest_factor_add": -0.9
+    },
+    "constraints": {"min_treasury": -999999}
   }
 ]
+

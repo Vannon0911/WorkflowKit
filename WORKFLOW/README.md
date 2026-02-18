@@ -23,3 +23,4 @@ Copilot transcript tooling (separate from PROJECT runtime):
 Standalone nutzen (ohne PROJECT):
 - `python check/audit_check.py --standalone`
 - Optional: `python tools/extract_workflow_repo.py --target ../WorkflowKit-Framework --init-git`
+- Locale files are required in standalone mode at `locales/de.json` and `locales/en.json`.

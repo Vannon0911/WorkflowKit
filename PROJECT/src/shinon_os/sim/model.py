@@ -49,6 +49,7 @@ class GameState:
     world: WorldState
     market: dict[str, MarketGood]
     sectors: dict[str, SectorState]
+    unlocked_policies: set[str] = field(default_factory=set)
     active_policies: dict[str, PolicyRuntime] = field(default_factory=dict)
 
 

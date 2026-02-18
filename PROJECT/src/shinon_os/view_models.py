@@ -110,4 +110,5 @@ class OSResponse:
     capability: CapabilityRegistry | None
     turn_advanced: bool
     should_quit: bool = False
+    locale_changed: bool = False
     events: list[str] = field(default_factory=list)

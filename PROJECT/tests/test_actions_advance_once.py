@@ -10,7 +10,7 @@ def test_action_advances_exactly_once(tmp_path: Path) -> None:
     try:
         app.start_new_game(seed=99)
         start_turn = app.current_turn()
-        response = app.process_command("enact FUND_RESEARCH 1.0")
+        response = app.process_command("enact TAX_ADJUST 0.05")
         assert response.turn_advanced is True
         assert app.current_turn() == start_turn + 1
 

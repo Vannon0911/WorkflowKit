@@ -19,6 +19,8 @@ Mandatory files:
 - LLM_RULES.md
 - PROTOCOL.md
 - PROJECT_SUMMARY.md
+- PROJECT/src/shinon_os/data/de.json
+- PROJECT/src/shinon_os/data/en.json
 
 Invariants:
 - WORKFLOW/.llm is the only source of truth.
@@ -36,6 +38,7 @@ Revision discipline:
 
 Drift guard:
 - If any mandatory .llm file is missing: stop and report consistency break.
+- If mandatory locale artifacts are missing: stop and report consistency break.
 - If revisions do not match changed artifacts: stop and report drift.
 - If checkpoint transition has no trace and audit record: stop and report drift.
 - Every IMPLEMENTED Q-ID must have a matching changes.md entry.

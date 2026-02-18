@@ -66,6 +66,8 @@ python -m pytest -q
 - Default: fullscreen Textual frame (Header, World canvas, Delta/Events, Status, Chat, Input, Footer) with hotkeys 1..6, ?, Ctrl+Q, and `:` command palette.
 - Fallback: plain mode routed through AppService (safe/no-anim friendly).
 - Views do not advance turns; actions advance exactly one turn.
+- Runtime language switch: `lang de` / `lang en` (default is `de`, with EN fallback for missing keys).
+- Additional operator commands: `unlock list`, `show goals`, `intel`.
 
 ## Hinweise
 

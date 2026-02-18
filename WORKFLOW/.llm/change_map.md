@@ -50,3 +50,41 @@ MAP-0039 | 2026-02-18 | CP-0023 | CHG-0021 | README.md | Copilot transcripts sec
 MAP-0040 | 2026-02-18 | CP-0023 | CHG-0021 | PROJECT/README.md | Session transcript section | DELETE | Removed PROJECT runtime transcript documentation
 MAP-0041 | 2026-02-18 | CP-0023 | CHG-0021 | WORKFLOW/README.md | Copilot transcript tooling section | UPDATE | Documented transcript ownership split and storage path
 MAP-0042 | 2026-02-18 | CP-0023 | CHG-0021 | WORKFLOW/check/README.md | Validated areas section | UPDATE | Updated audit scope wording for copilot transcript tool
+MAP-0043 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/i18n.py | set_lang/get_lang/t | ADD | Added runtime localization loader with EN fallback, cache and missing-key warning behavior
+MAP-0044 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/data/de.json | FILE_SCOPE | ADD | Added German locale key-value catalog for UI/content and gameplay strings
+MAP-0045 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/data/en.json | FILE_SCOPE | ADD | Added English locale key-value catalog and fallback source
+MAP-0046 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/data/unlocks.json | FILE_SCOPE | ADD | Added unlock progression rules used by engine ramp/cooldown logic
+MAP-0047 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/data/soft_goals.json | FILE_SCOPE | ADD | Added informational endless goal definitions with locale keys
+MAP-0048 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/data/intel_hints.json | FILE_SCOPE | ADD | Added hint definitions for manual and rare auto-intel outputs
+MAP-0049 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/persistence/schema.py | SCHEMA_VERSION/migrate_to_v3 | UPDATE | Introduced schema v3 with unlock table and language/collapse meta defaults plus strict-ramp migration
+MAP-0050 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/persistence/repo.py | language/unlock/meta helpers | UPDATE | Added persistence APIs for locale, unlock state, collapse state and hint timing metadata
+MAP-0051 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/sim/worldgen.py | DataBundle + new definitions | UPDATE | Extended bundle to load locale-key metadata, unlock rules, soft goals and intel hints
+MAP-0052 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/sim/model.py | GameState.unlocked_policies | UPDATE | Added explicit unlocked-policy state to runtime model
+MAP-0053 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/sim/engine.py | unlock/collapse/intel flow | UPDATE | Added unlock ramp+cooldown, collapse recovery gating, emergency policy visibility, goals/intel helpers and cashflow summaries
+MAP-0054 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/sim/events.py | apply_event return payload | UPDATE | Event output now resolves locale keys for label/description
+MAP-0055 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/core/blocks/interpret.py | command parsing + policy hints | UPDATE | Added `lang`, `unlock list`, `show goals`, `intel` command intents and expanded policy hint mappings
+MAP-0056 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/core/kernel.py | intent handlers + localized rendering | UPDATE | Added locale-switch handling, unlock/goals/intel commands, auto-hint injection and localized view/action output
+MAP-0057 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/core/blocks/plan.py | heuristic map + locale notes | UPDATE | Added new policy heuristics and localized predictive note/status text
+MAP-0058 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/core/blocks/narrate.py | render_action_report/render_view_header | UPDATE | Localized report/header labels while preserving deterministic action summary structure
+MAP-0059 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/core/phrasebank.py | phrase key model | UPDATE | Switched phrase selection to locale keys for DE/EN rendering
+MAP-0060 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/app_service.py | menu/help/response locale wiring | UPDATE | Added localized menu/help text, locale-changed propagation and new command discoverability
+MAP-0061 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/app.py | app init locale sync | UPDATE | Runtime now initializes active locale from persisted language metadata
+MAP-0062 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/ui/plain_cli.py | startup/prompt text | UPDATE | Plain UI prompts now resolve from locale keys
+MAP-0063 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/ui/textual_app.py | labels/help/locale refresh | UPDATE | Textual UI now localizes labels and refreshes visible text after runtime language change
+MAP-0064 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/view_models.py | OSResponse.locale_changed | UPDATE | Added locale_changed contract for UI refresh signaling
+MAP-0065 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/core/intents.py | LANG/UNLOCK_LIST/SHOW_GOALS/INTEL constants | UPDATE | Extended intent surface for new operator commands
+MAP-0066 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/core/types.py | KernelResponse.locale_changed | UPDATE | Added response flag to propagate runtime language switch events
+MAP-0067 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/data/policies.json | locale keys + new tiers/emergency policies | UPDATE | Added key-based labels/descriptions, tier-2/3 policies and collapse-only emergency policies
+MAP-0068 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/src/shinon_os/data/events.json | locale keys + systemic event expansion | UPDATE | Added locale-keyed labels/descriptions and extra systemic counter-force events
+MAP-0069 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/tests/test_i18n_locale.py | FILE_SCOPE | ADD | Added coverage for locale fallback, missing-key marker and language persistence command
+MAP-0070 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/tests/test_unlocks_and_collapse.py | FILE_SCOPE | ADD | Added unlock ramp/cooldown and collapse recovery/emergency policy lifecycle tests
+MAP-0071 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/tests/test_migrations.py | schema version expectations | UPDATE | Updated migration assertions for schema v3 and unlock/language metadata
+MAP-0072 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/tests/test_actions_advance_once.py | default action policy | UPDATE | Updated action-advance baseline to start-loadout policy under new unlock constraints
+MAP-0073 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/tests/test_chat_intent_auto_execute.py | expected executed_action | UPDATE | Updated auto-execute expectation to unlocked policy for deterministic startup behavior
+MAP-0074 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/tests/test_command_compatibility.py | action compatibility scenario | UPDATE | Adjusted compatibility action path to unlocked command under gated progression
+MAP-0075 | 2026-02-18 | CP-0024 | CHG-0022 | WORKFLOW/check/audit_check.py | locale-file validation | UPDATE | Audit now enforces locale file presence in monorepo and standalone layouts
+MAP-0076 | 2026-02-18 | CP-0024 | CHG-0022 | WORKFLOW/tools/extract_workflow_repo.py | locale copy stage | UPDATE | Standalone export now includes DE/EN locale artifacts in `locales/` for standalone audit compatibility
+MAP-0077 | 2026-02-18 | CP-0024 | CHG-0022 | README.md | language/export/audit usage sections | UPDATE | Documented runtime language switching and locale-aware standalone workflow verification
+MAP-0078 | 2026-02-18 | CP-0024 | CHG-0022 | PROJECT/README.md | UI command notes section | UPDATE | Added language-select and unlock/goals/intel command guidance for operators
+MAP-0079 | 2026-02-18 | CP-0024 | CHG-0022 | WORKFLOW/README.md | standalone locale requirement note | UPDATE | Added explicit locale artifact requirement for standalone audit mode
+MAP-0080 | 2026-02-18 | CP-0024 | CHG-0022 | WORKFLOW/check/README.md | validated areas list | UPDATE | Added locale validation coverage details for monorepo and standalone modes

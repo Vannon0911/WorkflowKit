@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW_DIR = ROOT / "WORKFLOW"
+PROJECT_LOCALES = ROOT / "PROJECT" / "src" / "shinon_os" / "data"
 
 
 def read_checkpoint() -> str:
@@ -46,6 +47,14 @@ def copy_tree(target: Path) -> None:
             if dst.exists():
                 dst.unlink()
             shutil.copy2(src, dst)
+
+    locales_target = target / "locales"
+    locales_target.mkdir(parents=True, exist_ok=True)
+    for locale_name in ("de.json", "en.json"):
+        src = PROJECT_LOCALES / locale_name
+        if not src.exists():
+            sys.exit(f"Missing locale file for export: {src}")
+        shutil.copy2(src, locales_target / locale_name)
 
 
 def write_gitignore(target: Path) -> None:

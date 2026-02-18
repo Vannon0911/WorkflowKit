@@ -13,6 +13,8 @@ from shinon_os.util.timeutil import utc_now_iso
 @dataclass(frozen=True)
 class PolicyDefinition:
     policy_id: str
+    label_key: str | None
+    description_key: str | None
     label: str
     description: str
     target_type: str
@@ -27,11 +29,38 @@ class PolicyDefinition:
 @dataclass(frozen=True)
 class EventDefinition:
     event_id: str
+    label_key: str | None
+    description_key: str | None
     label: str
     description: str
     base_weight: float
     conditions: dict[str, Any]
     effects: dict[str, Any]
+
+
+@dataclass(frozen=True)
+class UnlockRule:
+    policy_id: str
+    min_turn: int
+    min_actions: int
+    source: str
+
+
+@dataclass(frozen=True)
+class SoftGoalDefinition:
+    goal_id: str
+    title_key: str
+    description_key: str
+    metric: str
+    target: float
+    operator: str
+
+
+@dataclass(frozen=True)
+class IntelHintDefinition:
+    hint_id: str
+    text_key: str
+    conditions: dict[str, Any]
 
 
 @dataclass(frozen=True)
@@ -41,6 +70,9 @@ class DataBundle:
     sectors: list[dict[str, Any]]
     policies: dict[str, PolicyDefinition]
     events: list[EventDefinition]
+    unlocks: list[UnlockRule]
+    soft_goals: list[SoftGoalDefinition]
+    intel_hints: list[IntelHintDefinition]
 
     def goods_by_id(self) -> dict[str, dict[str, Any]]:
         return {g["id"]: g for g in self.goods}
@@ -63,7 +95,16 @@ def _read_json(path: Path) -> Any:
         return json.load(fh)
 
 
-def _validate_data(config: dict[str, Any], goods: list[dict[str, Any]], sectors: list[dict[str, Any]], policies: list[dict[str, Any]], events: list[dict[str, Any]]) -> None:
+def _validate_data(
+    config: dict[str, Any],
+    goods: list[dict[str, Any]],
+    sectors: list[dict[str, Any]],
+    policies: list[dict[str, Any]],
+    events: list[dict[str, Any]],
+    unlocks: list[dict[str, Any]],
+    soft_goals: list[dict[str, Any]],
+    intel_hints: list[dict[str, Any]],
+) -> None:
     required_world = {"population", "prosperity", "stability", "unrest", "tech_level", "treasury"}
     if not required_world.issubset(set(config.get("world", {}).keys())):
         raise ValueError("config.world is missing required keys.")
@@ -93,6 +134,21 @@ def _validate_data(config: dict[str, Any], goods: list[dict[str, Any]], sectors:
             if field not in event:
                 raise ValueError(f"Event missing field: {field}")
 
+    for rule in unlocks:
+        for field in ("policy_id", "min_turn", "min_actions"):
+            if field not in rule:
+                raise ValueError(f"Unlock rule missing field: {field}")
+
+    for goal in soft_goals:
+        for field in ("id", "title_key", "description_key", "metric", "target", "operator"):
+            if field not in goal:
+                raise ValueError(f"Soft goal missing field: {field}")
+
+    for hint in intel_hints:
+        for field in ("id", "text_key"):
+            if field not in hint:
+                raise ValueError(f"Intel hint missing field: {field}")
+
 
 def load_data(data_dir: Path | None = None) -> DataBundle:
     root = data_dir or package_data_dir()
@@ -101,13 +157,18 @@ def load_data(data_dir: Path | None = None) -> DataBundle:
     sectors = _read_json(root / "sectors.json")
     policies_raw = _read_json(root / "policies.json")
     events_raw = _read_json(root / "events.json")
+    unlocks_raw = _read_json(root / "unlocks.json")
+    soft_goals_raw = _read_json(root / "soft_goals.json")
+    intel_hints_raw = _read_json(root / "intel_hints.json")
 
-    _validate_data(config, goods, sectors, policies_raw, events_raw)
+    _validate_data(config, goods, sectors, policies_raw, events_raw, unlocks_raw, soft_goals_raw, intel_hints_raw)
 
     policies: dict[str, PolicyDefinition] = {}
     for row in policies_raw:
         policies[row["id"]] = PolicyDefinition(
             policy_id=row["id"],
+            label_key=row.get("label_key"),
+            description_key=row.get("description_key"),
             label=row["label"],
             description=row["description"],
             target_type=row.get("target_type", "none"),
@@ -129,6 +190,8 @@ def load_data(data_dir: Path | None = None) -> DataBundle:
         events.append(
             EventDefinition(
                 event_id=row["id"],
+                label_key=row.get("label_key"),
+                description_key=row.get("description_key"),
                 label=row["label"],
                 description=row["description"],
                 base_weight=float(row["base_weight"]),
@@ -137,7 +200,50 @@ def load_data(data_dir: Path | None = None) -> DataBundle:
             )
         )
 
-    return DataBundle(config=config, goods=goods, sectors=sectors, policies=policies, events=events)
+    unlocks: list[UnlockRule] = []
+    for row in unlocks_raw:
+        unlocks.append(
+            UnlockRule(
+                policy_id=str(row["policy_id"]),
+                min_turn=int(row["min_turn"]),
+                min_actions=int(row["min_actions"]),
+                source=str(row.get("source", "rule")),
+            )
+        )
+
+    soft_goals: list[SoftGoalDefinition] = []
+    for row in soft_goals_raw:
+        soft_goals.append(
+            SoftGoalDefinition(
+                goal_id=str(row["id"]),
+                title_key=str(row["title_key"]),
+                description_key=str(row["description_key"]),
+                metric=str(row["metric"]),
+                target=float(row["target"]),
+                operator=str(row["operator"]),
+            )
+        )
+
+    intel_hints: list[IntelHintDefinition] = []
+    for row in intel_hints_raw:
+        intel_hints.append(
+            IntelHintDefinition(
+                hint_id=str(row["id"]),
+                text_key=str(row["text_key"]),
+                conditions=dict(row.get("conditions", {})),
+            )
+        )
+
+    return DataBundle(
+        config=config,
+        goods=goods,
+        sectors=sectors,
+        policies=policies,
+        events=events,
+        unlocks=unlocks,
+        soft_goals=soft_goals,
+        intel_hints=intel_hints,
+    )
 
 
 def build_initial_state(bundle: DataBundle) -> GameState:

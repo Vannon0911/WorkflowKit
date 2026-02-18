@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sqlite3
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 def _table_exists(conn: sqlite3.Connection, table: str) -> bool:
@@ -92,8 +92,19 @@ def create_schema(conn: sqlite3.Connection) -> None:
             summary_json TEXT NOT NULL,
             PRIMARY KEY(turn, event_id)
         );
+
+        CREATE TABLE IF NOT EXISTS unlocked_policies(
+            policy_id TEXT PRIMARY KEY,
+            unlocked_turn INTEGER NOT NULL,
+            source TEXT NOT NULL
+        );
         """
     )
+    set_meta(conn, "language", "de")
+    set_meta(conn, "collapse_active", "0")
+    set_meta(conn, "collapse_recovery_streak", "0")
+    set_meta(conn, "next_unlock_turn", "0")
+    set_meta(conn, "last_auto_intel_turn", "-9999")
     set_meta(conn, "schema_version", str(SCHEMA_VERSION))
 
 
@@ -125,6 +136,41 @@ def migrate_to_v2(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE active_policies ADD COLUMN state_json TEXT NOT NULL DEFAULT '{}';")
 
 
+def _reset_unlocks_to_start_loadout(conn: sqlite3.Connection) -> None:
+    conn.execute("DELETE FROM unlocked_policies")
+    start_ids = ("TAX_ADJUST", "SUBSIDY_SECTOR", "IMPORT_PROGRAM")
+    for policy_id in start_ids:
+        conn.execute(
+            "INSERT INTO unlocked_policies(policy_id, unlocked_turn, source) VALUES(?, ?, ?)",
+            (policy_id, 0, "migration_strict_ramp"),
+        )
+
+
+def migrate_to_v3(conn: sqlite3.Connection) -> None:
+    if not _table_exists(conn, "unlocked_policies"):
+        conn.execute(
+            """
+            CREATE TABLE unlocked_policies(
+                policy_id TEXT PRIMARY KEY,
+                unlocked_turn INTEGER NOT NULL,
+                source TEXT NOT NULL
+            );
+            """
+        )
+    _reset_unlocks_to_start_loadout(conn)
+
+    if get_meta(conn, "language", None) is None:
+        set_meta(conn, "language", "de")
+    if get_meta(conn, "collapse_active", None) is None:
+        set_meta(conn, "collapse_active", "0")
+    if get_meta(conn, "collapse_recovery_streak", None) is None:
+        set_meta(conn, "collapse_recovery_streak", "0")
+    if get_meta(conn, "next_unlock_turn", None) is None:
+        set_meta(conn, "next_unlock_turn", "0")
+    if get_meta(conn, "last_auto_intel_turn", None) is None:
+        set_meta(conn, "last_auto_intel_turn", "-9999")
+
+
 def ensure_schema(conn: sqlite3.Connection) -> None:
     if not _table_exists(conn, "meta"):
         create_schema(conn)
@@ -136,6 +182,10 @@ def ensure_schema(conn: sqlite3.Connection) -> None:
     if version < 2:
         migrate_to_v2(conn)
         version = 2
+
+    if version < 3:
+        migrate_to_v3(conn)
+        version = 3
 
     if version < SCHEMA_VERSION:
         create_schema(conn)

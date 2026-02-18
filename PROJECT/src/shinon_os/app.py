@@ -5,6 +5,7 @@ from pathlib import Path
 
 from shinon_os.core.kernel import ShinonKernel
 from shinon_os.core.types import BootSequenceModel, KernelResponse
+from shinon_os.i18n import set_lang
 from shinon_os.persistence.repo import StateRepository
 from shinon_os.sim.engine import SimulationEngine
 from shinon_os.sim.worldgen import DataBundle, load_data
@@ -18,6 +19,7 @@ class ShinonApp:
         self.bundle: DataBundle = load_data(data_dir=data_dir)
         self.logger = JsonlRotatingLogger(log_dir or default_log_dir())
         self.repo = StateRepository(self.db_path)
+        set_lang(self.repo.get_language())
         self.engine = SimulationEngine(bundle=self.bundle, repo=self.repo, logger=self.logger)
         self.kernel = ShinonKernel(engine=self.engine, logger=self.logger)
         self._boot_model = BootSequenceModel(

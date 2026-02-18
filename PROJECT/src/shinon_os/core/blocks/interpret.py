@@ -30,6 +30,13 @@ def _policy_hint(text: str) -> tuple[str | None, float]:
         ("SUBSIDY_SECTOR", ["subsidy", "subsidize", "foerder", "support sector"], 0.82),
         ("WORK_HOURS_REFORM", ["work hours", "arbeitszeit", "labor reform"], 0.8),
         ("TAX_ADJUST", ["tax", "steuer"], 0.83),
+        ("PRICE_STABILIZER", ["price stabil", "inflation"], 0.8),
+        ("LOGISTICS_PUSH", ["logistics", "supply chain"], 0.8),
+        ("INDUSTRIAL_MODERNIZATION", ["modernization", "modernisation", "industrie upgrade"], 0.78),
+        ("STRATEGIC_RESERVE", ["reserve", "stock buffer"], 0.78),
+        ("SOCIAL_COMPACT", ["social compact", "cohesion"], 0.78),
+        ("SOS_CREDIT", ["sos credit", "emergency credit"], 0.82),
+        ("RATIONING_PLUS", ["emergency ration"], 0.8),
     ]
     for policy_id, words, confidence in rules:
         if any(word in text for word in words):
@@ -50,6 +57,15 @@ def parse_input(raw_text: str, current_view: str, policy_target_types: dict[str,
         return Intent(kind=intents.QUIT, raw=raw_text, confidence=1.0)
     if low in {"h", "help", "?"}:
         return Intent(kind=intents.HELP, raw=raw_text, confidence=1.0)
+    if low.startswith("lang "):
+        code = low.split(" ", 1)[1].strip()
+        return Intent(kind=intents.LANG, raw=raw_text, args={"code": code}, confidence=1.0)
+    if low in {"unlock list", "unlocks", "unlocks list"}:
+        return Intent(kind=intents.UNLOCK_LIST, raw=raw_text, confidence=1.0)
+    if low in {"show goals", "goals"}:
+        return Intent(kind=intents.SHOW_GOALS, raw=raw_text, confidence=1.0)
+    if low in {"intel", "show intel"}:
+        return Intent(kind=intents.INTEL, raw=raw_text, confidence=1.0)
     if low in {"dashboard", "dash", "d"}:
         return Intent(kind=intents.VIEW_DASH, raw=raw_text, confidence=1.0)
     if low in {"market", "m"}:

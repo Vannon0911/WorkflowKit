@@ -23,6 +23,8 @@ Cold files (tail-read by default):
 - versioning.md
 - trace.md
 - audit.md
+- PROJECT/src/shinon_os/data/de.json
+- PROJECT/src/shinon_os/data/en.json
 
 Tail policy:
 - Default tail depth: 50 entries per cold file.

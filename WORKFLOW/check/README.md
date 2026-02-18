@@ -20,6 +20,7 @@ Exit codes:
 
 Validated areas:
 - mandatory `.llm` file presence
+- mandatory locale files (`PROJECT/src/shinon_os/data/*.json` in monorepo, `locales/*.json` in standalone)
 - CHG/MAP sequence integrity and references
 - enforced CHG to MAP coverage
 - state/current revision consistency

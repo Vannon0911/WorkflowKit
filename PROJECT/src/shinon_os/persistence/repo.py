@@ -8,6 +8,8 @@ from shinon_os.persistence.schema import ensure_schema, get_meta, set_meta
 from shinon_os.sim.model import GameState, MarketGood, PolicyRuntime, SectorState, WorldState
 from shinon_os.util.timeutil import utc_now_iso
 
+START_LOADOUT = ("TAX_ADJUST", "SUBSIDY_SECTOR", "IMPORT_PROGRAM")
+
 
 class StateRepository:
     def __init__(self, db_path: Path) -> None:
@@ -28,6 +30,92 @@ class StateRepository:
             return None
         return int(raw)
 
+    def get_language(self) -> str:
+        return str(get_meta(self.conn, "language", "de") or "de")
+
+    def set_language(self, code: str) -> None:
+        normalized = (code or "").strip().lower()
+        with self.conn:
+            set_meta(self.conn, "language", "de" if normalized not in {"de", "en"} else normalized)
+
+    def get_str_meta(self, key: str, default: str = "") -> str:
+        raw = get_meta(self.conn, key, default)
+        return str(raw if raw is not None else default)
+
+    def set_str_meta(self, key: str, value: str) -> None:
+        with self.conn:
+            set_meta(self.conn, key, str(value))
+
+    def get_int_meta(self, key: str, default: int = 0) -> int:
+        raw = get_meta(self.conn, key, None)
+        if raw is None:
+            return default
+        try:
+            return int(raw)
+        except ValueError:
+            return default
+
+    def set_int_meta(self, key: str, value: int) -> None:
+        with self.conn:
+            set_meta(self.conn, key, str(int(value)))
+
+    def get_bool_meta(self, key: str, default: bool = False) -> bool:
+        return self.get_int_meta(key, 1 if default else 0) != 0
+
+    def set_bool_meta(self, key: str, value: bool) -> None:
+        self.set_int_meta(key, 1 if value else 0)
+
+    def list_unlocked_policies(self) -> set[str]:
+        rows = self.conn.execute("SELECT policy_id FROM unlocked_policies ORDER BY policy_id").fetchall()
+        return {str(row["policy_id"]) for row in rows}
+
+    def unlocked_policy_rows(self) -> list[dict[str, object]]:
+        rows = self.conn.execute(
+            "SELECT policy_id, unlocked_turn, source FROM unlocked_policies ORDER BY unlocked_turn, policy_id"
+        ).fetchall()
+        result: list[dict[str, object]] = []
+        for row in rows:
+            result.append(
+                {
+                    "policy_id": str(row["policy_id"]),
+                    "unlocked_turn": int(row["unlocked_turn"]),
+                    "source": str(row["source"]),
+                }
+            )
+        return result
+
+    def replace_unlocked_policies(self, policy_ids: set[str], turn: int, source: str = "reset") -> None:
+        with self.conn:
+            self.conn.execute("DELETE FROM unlocked_policies")
+            for policy_id in sorted(policy_ids):
+                self.conn.execute(
+                    "INSERT INTO unlocked_policies(policy_id, unlocked_turn, source) VALUES(?, ?, ?)",
+                    (policy_id, int(turn), source),
+                )
+
+    def unlock_policy(self, policy_id: str, turn: int, source: str = "rule") -> None:
+        with self.conn:
+            self.conn.execute(
+                """
+                INSERT INTO unlocked_policies(policy_id, unlocked_turn, source)
+                VALUES(?, ?, ?)
+                ON CONFLICT(policy_id) DO UPDATE SET
+                    unlocked_turn = excluded.unlocked_turn,
+                    source = excluded.source
+                """,
+                (policy_id, int(turn), source),
+            )
+
+    def trailing_cashflow(self, window: int, include_current: float = 0.0) -> float:
+        if window <= 0:
+            return 0.0
+        rows = self.history(limit=max(0, window - 1))
+        total = float(include_current)
+        for row in rows:
+            summary = row.get("summary", {})
+            total += float(summary.get("net_cashflow", 0.0))
+        return total
+
     def init_new_game(self, seed: int, state: GameState) -> None:
         with self.conn:
             self.conn.execute("DELETE FROM world_state")
@@ -36,9 +124,16 @@ class StateRepository:
             self.conn.execute("DELETE FROM active_policies")
             self.conn.execute("DELETE FROM history")
             self.conn.execute("DELETE FROM events_log")
+            self.conn.execute("DELETE FROM unlocked_policies")
 
             set_meta(self.conn, "seed", str(seed))
             set_meta(self.conn, "created_at", utc_now_iso())
+            set_meta(self.conn, "language", "de")
+            set_meta(self.conn, "collapse_active", "0")
+            set_meta(self.conn, "collapse_recovery_streak", "0")
+            set_meta(self.conn, "next_unlock_turn", "0")
+            set_meta(self.conn, "last_auto_intel_turn", "-9999")
+            set_meta(self.conn, "last_intel_hint_id", "")
 
             self.conn.execute(
                 """
@@ -74,6 +169,12 @@ class StateRepository:
                     VALUES(?, ?, ?, ?)
                     """,
                     (sector.sector_id, sector.capacity, sector.efficiency, sector.upkeep),
+                )
+
+            for policy_id in START_LOADOUT:
+                self.conn.execute(
+                    "INSERT INTO unlocked_policies(policy_id, unlocked_turn, source) VALUES(?, ?, ?)",
+                    (policy_id, 0, "new_game"),
                 )
 
     def load_state(self, sector_io_defs: dict[str, dict[str, dict[str, float]]]) -> GameState:
@@ -127,7 +228,18 @@ class StateRepository:
                 state=json.loads(str(row["state_json"])),
             )
 
-        return GameState(world=world, market=market, sectors=sectors, active_policies=active_policies)
+        unlocked_rows = self.conn.execute(
+            "SELECT policy_id FROM unlocked_policies ORDER BY policy_id"
+        ).fetchall()
+        unlocked_policies = {str(row["policy_id"]) for row in unlocked_rows}
+
+        return GameState(
+            world=world,
+            market=market,
+            sectors=sectors,
+            unlocked_policies=unlocked_policies,
+            active_policies=active_policies,
+        )
 
     def save_state(self, state: GameState) -> None:
         with self.conn:

@@ -7,7 +7,7 @@ from shinon_os.persistence.repo import StateRepository
 from shinon_os.sim.worldgen import load_data
 
 
-def test_migration_from_v1_to_v2(tmp_path: Path) -> None:
+def test_migration_from_v1_to_v3(tmp_path: Path) -> None:
     db_path = tmp_path / "legacy.sqlite3"
     conn = sqlite3.connect(db_path)
     conn.executescript(
@@ -71,13 +71,16 @@ def test_migration_from_v1_to_v2(tmp_path: Path) -> None:
     try:
         migrated = repo.conn.execute("SELECT value FROM meta WHERE key = 'schema_version'").fetchone()
         assert migrated is not None
-        assert migrated[0] == "2"
+        assert migrated[0] == "3"
 
         cols = [row[1] for row in repo.conn.execute("PRAGMA table_info(active_policies)").fetchall()]
         assert "state_json" in cols
+        unlocked_cols = [row[1] for row in repo.conn.execute("PRAGMA table_info(unlocked_policies)").fetchall()]
+        assert "policy_id" in unlocked_cols
 
         bundle = load_data()
         state = repo.load_state(bundle.sector_io_defs())
         assert state.world.turn == 0
+        assert repo.get_language() == "de"
     finally:
         repo.close()

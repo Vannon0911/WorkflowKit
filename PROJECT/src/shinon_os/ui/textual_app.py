@@ -1,6 +1,7 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from shinon_os.app_service import AppService
+from shinon_os.i18n import t
 from shinon_os.view_models import OSResponse, StatusModel
 
 
@@ -20,7 +21,7 @@ def _render_bar(value: float, label: str) -> str:
 
 def _render_world_canvas(status: StatusModel | None) -> str:
     if status is None:
-        return "Subsystem not available"
+        return t("app.error.subsystem")
     lines = [
         f"TURN {status.turn} | VIEW {status.current_view.upper()}",
         _render_bar(status.prosperity, "prosperity"),
@@ -49,7 +50,7 @@ class TextualSession:
         class BootScreen(Screen):
             def compose(self) -> ComposeResult:
                 yield Container(
-                    Static("SHINON", id="boot_title"),
+                    Static(t("ui.boot.title"), id="boot_title"),
                     id="boot_center",
                 )
 
@@ -78,22 +79,29 @@ class TextualSession:
                     with Horizontal(id="upper"):
                         yield Static(id="world_panel")
                         with Vertical(id="right_stack"):
-                            yield Static("Delta / Events", id="delta_title")
+                            yield Static(t("ui.delta_title"), id="delta_title")
                             yield Static(id="delta_panel")
-                            yield Static("Status", id="status_title")
+                            yield Static(t("ui.status_title"), id="status_title")
                             yield Static(id="status_panel")
                     with Vertical(id="chat_zone"):
-                        yield Static("Chat", id="chat_title")
+                        yield Static(t("ui.chat_title"), id="chat_title")
                         yield Static("", id="chat_log")
-                        yield Input(placeholder="Type directive or :command", id="chat_input")
+                        yield Input(placeholder=t("ui.input_placeholder"), id="chat_input")
                 yield Footer()
 
             def on_mount(self) -> None:
                 self._chat_lines: list[str] = []
                 service.bootstrap()
+                self._refresh_labels()
                 self._update_view("dashboard")
                 if service.capabilities.animations_enabled and not service.capabilities.safe_mode:
                     self.set_interval(1.0, self._ambient_refresh)
+
+            def _refresh_labels(self) -> None:
+                self.query_one("#delta_title", Static).update(t("ui.delta_title"))
+                self.query_one("#status_title", Static).update(t("ui.status_title"))
+                self.query_one("#chat_title", Static).update(t("ui.chat_title"))
+                self.query_one("#chat_input", Input).placeholder = t("ui.input_placeholder")
 
             def _ambient_refresh(self) -> None:
                 if self.response and not self.response.turn_advanced:
@@ -118,7 +126,9 @@ class TextualSession:
                 if resp.events:
                     self.query_one("#delta_panel", Static).update(" | ".join(resp.events))
                 else:
-                    self.query_one("#delta_panel", Static).update("no events")
+                    self.query_one("#delta_panel", Static).update(t("ui.no_events"))
+                if resp.locale_changed:
+                    self._refresh_labels()
                 if resp.turn_advanced and service.capabilities.animations_enabled:
                     self.add_class("fx-turn")
                     self.set_timer(0.3, lambda: self.remove_class("fx-turn"))
@@ -164,7 +174,7 @@ class TextualSession:
                 self._update_view("explain prices")
 
             def action_show_help(self) -> None:
-                self._append_chat("Help: 1..6 switch views, :command runs, Ctrl+Q quits.")
+                self._append_chat(t("ui.help.short"))
 
             def action_focus_command(self) -> None:
                 self.query_one("#chat_input", Input).focus()

@@ -5,6 +5,7 @@ from typing import Callable
 
 from shinon_os.app import ShinonApp
 from shinon_os.core import intents
+from shinon_os.i18n import set_lang, t
 from shinon_os.view_models import (
     CapabilityRegistry,
     DashboardVM,
@@ -43,6 +44,7 @@ class AppService:
     def __init__(self, options: AppOptions, app: ShinonApp | None = None) -> None:
         self.options = options
         self.app = app or ShinonApp()
+        set_lang(self.app.repo.get_language())
         self.capabilities = CapabilityRegistry(
             textual_available=_textual_available(),
             animations_enabled=not options.no_anim,
@@ -67,13 +69,14 @@ class AppService:
             self.app.logger.error({"where": "bootstrap", "error": str(exc)})
             return self._os_error("Subsystem not available")
         return OSResponse(
-            message="Boot complete",
+            message=t("app.boot.complete"),
             view="status",
             view_model=None,
             status=self.get_status(),
             menu=self.get_menu(),
             capability=self.capabilities,
             turn_advanced=False,
+            locale_changed=False,
             should_quit=False,
         )
 
@@ -87,10 +90,14 @@ class AppService:
                 "history",
                 "explain <topic>",
                 "enact <policy> [magnitude] [target]",
+                "lang <de|en>",
+                "unlock list",
+                "show goals",
+                "intel",
                 "quit",
             ],
             hotkeys=["1..6 views", "?: help", "Ctrl+Q: quit", ":cmd palette"],
-            help="Views do not advance turns; actions advance exactly one turn.",
+            help=t("app.menu.help"),
         )
 
     def get_status(self) -> StatusModel | None:
@@ -193,17 +200,17 @@ class AppService:
         normalized = topic.strip().lower()
         if normalized in {"price", "prices"}:
             text = (
-                "prices: demand/supply ratio is damped into [0.5, 2.0], then applied via lerp with k_demand. "
-                "shortages: supply < demand*(1-shortage_threshold) raises unrest pressure and lowers prosperity."
+                f"{t('kernel.explain.prices')} "
+                f"{t('kernel.explain.shortages')}"
             )
         elif normalized in {"shortage", "shortages"}:
-            text = "shortages increase social risk. SHINON tracks shortage_risk and pushes CONTROL or SURVIVAL stance."
+            text = t("kernel.explain.shortages2")
         elif normalized.startswith("policy "):
             policy_id = normalized.split(" ", 1)[1].upper()
             definition = self.app.engine.bundle.policies.get(policy_id)
-            text = f"{policy_id}: {definition.description}" if definition else "unknown policy"
+            text = f"{policy_id}: {self.app.engine._policy_desc(policy_id)}" if definition else t("kernel.explain.unknown_policy")
         else:
-            text = "topics: explain prices | explain shortages | explain policy <POLICY_ID>"
+            text = t("kernel.explain.topics")
         return ExplainVM(topic=topic or "general", text=text)
 
     def get_view(self, view_id: str) -> OSResponse:
@@ -229,18 +236,20 @@ class AppService:
             menu=self.get_menu(),
             capability=self.capabilities,
             turn_advanced=False,
+            locale_changed=False,
             should_quit=False,
         )
 
     def get_help(self) -> OSResponse:
         return OSResponse(
-            message="SHINON help: 1..6 switch views, :command executes, actions advance one turn, views do not.",
+            message=t("app.help.message"),
             view="help",
             view_model=None,
             status=self.get_status(),
             menu=self.get_menu(),
             capability=self.capabilities,
             turn_advanced=False,
+            locale_changed=False,
             should_quit=False,
         )
 
@@ -258,7 +267,7 @@ class AppService:
                 and response.chat_turn.recognized_intent == intents.HELP
                 and raw_lower not in {"h", "help", "?"}
             ):
-                friendly_message = "Subsystem not available"
+                friendly_message = t("app.error.subsystem")
             os_response = OSResponse(
                 message=friendly_message,
                 view=response.current_view,
@@ -268,12 +277,13 @@ class AppService:
                 capability=self.capabilities,
                 turn_advanced=response.turn_advanced,
                 should_quit=response.should_quit,
+                locale_changed=response.locale_changed,
                 events=response.chat_turn.events if response.chat_turn else [],
             )
             return os_response
         except Exception as exc:  # pragma: no cover - defensive
             self.app.logger.error({"where": "app_service.handle.error", "raw": raw, "error": str(exc)})
-            error_response = self._os_error("Subsystem not available")
+            error_response = self._os_error(t("app.error.subsystem"))
             return error_response
 
     def _select_view_model(self, intent_kind_or_view: str, raw: str) -> object | None:
@@ -303,5 +313,6 @@ class AppService:
             menu=self.get_menu(),
             capability=self.capabilities,
             turn_advanced=False,
+            locale_changed=False,
             should_quit=False,
         )

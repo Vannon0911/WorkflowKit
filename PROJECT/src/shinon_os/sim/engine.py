@@ -3,7 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from shinon_os.persistence.repo import StateRepository
+from shinon_os.i18n import t
+from shinon_os.persistence.repo import START_LOADOUT, StateRepository
 from shinon_os.sim.actions import validate_action
 from shinon_os.sim.economy import clamp, simulate_market
 from shinon_os.sim.events import apply_event, choose_event
@@ -12,6 +13,8 @@ from shinon_os.sim.model import GameState, PolicyRuntime, SimResult, WorldState
 from shinon_os.sim.worldgen import DataBundle, build_initial_state
 from shinon_os.util.logging_setup import JsonlRotatingLogger
 from shinon_os.util.timeutil import utc_now_iso
+
+EMERGENCY_POLICY_IDS = {"SOS_CREDIT", "RATIONING_PLUS"}
 
 
 class SimulationEngine:
@@ -26,19 +29,41 @@ class SimulationEngine:
 
     def new_game(self, seed: int) -> None:
         state = build_initial_state(self.bundle)
+        state.unlocked_policies = set(START_LOADOUT)
         self.repo.init_new_game(seed=seed, state=state)
 
     def load_state(self) -> GameState:
         return self.repo.load_state(self.bundle.sector_io_defs())
 
+    def collapse_active(self) -> bool:
+        return self.repo.get_bool_meta("collapse_active", False)
+
+    def _policy_label(self, policy_id: str) -> str:
+        definition = self.bundle.policies[policy_id]
+        if definition.label_key:
+            return t(definition.label_key)
+        return definition.label
+
+    def _policy_desc(self, policy_id: str) -> str:
+        definition = self.bundle.policies[policy_id]
+        if definition.description_key:
+            return t(definition.description_key)
+        return definition.description
+
+    def _policy_unlocked(self, state: GameState, policy_id: str) -> bool:
+        if policy_id in EMERGENCY_POLICY_IDS:
+            return self.collapse_active()
+        return policy_id in state.unlocked_policies
+
     def policy_status(self, state: GameState) -> list[dict[str, Any]]:
         rows: list[dict[str, Any]] = []
         for policy_id, definition in self.bundle.policies.items():
             runtime = state.active_policies.get(policy_id)
-            status = "available"
+            unlocked = self._policy_unlocked(state, policy_id)
+            status = "locked" if not unlocked else "available"
             remaining = 0
             cooldown = 0
-            if runtime:
+            if unlocked and runtime:
                 if runtime.remaining_ticks > 0:
                     status = "active"
                     remaining = runtime.remaining_ticks
@@ -48,15 +73,111 @@ class SimulationEngine:
             rows.append(
                 {
                     "id": policy_id,
-                    "label": definition.label,
+                    "label": t(definition.label_key) if definition.label_key else definition.label,
                     "status": status,
                     "remaining_ticks": remaining,
                     "cooldown_ticks": cooldown,
-                    "description": definition.description,
+                    "description": t(definition.description_key) if definition.description_key else definition.description,
+                    "is_emergency": policy_id in EMERGENCY_POLICY_IDS,
                 }
             )
         rows.sort(key=lambda row: row["id"])
         return rows
+
+    def unlock_status(self, state: GameState) -> list[dict[str, Any]]:
+        rows = self.repo.unlocked_policy_rows()
+        index = {str(row["policy_id"]): row for row in rows}
+        result: list[dict[str, Any]] = []
+        for policy_id in sorted(self.bundle.policies):
+            row = index.get(policy_id)
+            unlocked = self._policy_unlocked(state, policy_id)
+            result.append(
+                {
+                    "policy_id": policy_id,
+                    "label": self._policy_label(policy_id),
+                    "unlocked": unlocked,
+                    "unlocked_turn": int(row["unlocked_turn"]) if row else -1,
+                    "source": str(row["source"]) if row else ("collapse_only" if policy_id in EMERGENCY_POLICY_IDS else "locked"),
+                }
+            )
+        return result
+
+    def soft_goals(self, state: GameState) -> list[dict[str, Any]]:
+        values = {
+            "treasury": float(state.world.treasury),
+            "population": float(state.world.population),
+            "prosperity": float(state.world.prosperity),
+            "stability": float(state.world.stability),
+            "unrest": float(state.world.unrest),
+            "tech_level": float(state.world.tech_level),
+        }
+        rows: list[dict[str, Any]] = []
+        for goal in self.bundle.soft_goals:
+            current = values.get(goal.metric, 0.0)
+            if goal.operator == ">=":
+                done = current >= goal.target
+                ratio = 1.0 if goal.target == 0 else min(1.0, current / goal.target)
+            else:
+                done = current <= goal.target
+                ratio = 1.0 if current <= 0 else min(1.0, goal.target / current)
+            rows.append(
+                {
+                    "id": goal.goal_id,
+                    "title": t(goal.title_key),
+                    "description": t(goal.description_key),
+                    "metric": goal.metric,
+                    "operator": goal.operator,
+                    "target": goal.target,
+                    "current": current,
+                    "done": done,
+                    "progress": max(0.0, min(1.0, ratio)),
+                }
+            )
+        return rows
+
+    def _hint_matches(self, state: GameState, conditions: dict[str, Any]) -> bool:
+        shortages = sum(1 for row in state.market.values() if row.supply < row.demand * 0.88)
+        if shortages < int(conditions.get("min_shortages", 0)):
+            return False
+        if state.world.treasury > int(conditions.get("max_treasury", 10**9)):
+            return False
+        if state.world.unrest < float(conditions.get("min_unrest", 0.0)):
+            return False
+        if state.world.stability < float(conditions.get("min_stability", 0.0)):
+            return False
+        if state.world.unrest > float(conditions.get("max_unrest", 100.0)):
+            return False
+        return True
+
+    def _pick_hint_id(self, state: GameState, avoid_hint_id: str) -> str | None:
+        candidates: list[str] = []
+        for hint in self.bundle.intel_hints:
+            if not self._hint_matches(state, hint.conditions):
+                continue
+            candidates.append(hint.hint_id)
+        if not candidates:
+            return None
+        for hint_id in candidates:
+            if hint_id != avoid_hint_id:
+                return hint_id
+        return candidates[0]
+
+    def intel_hint(self, state: GameState, auto: bool = False) -> dict[str, str] | None:
+        last_hint_id = self.repo.get_str_meta("last_intel_hint_id", "")
+        if auto:
+            last_turn = self.repo.get_int_meta("last_auto_intel_turn", -9999)
+            if state.world.turn - last_turn < 5:
+                return None
+        hint_id = self._pick_hint_id(state, last_hint_id)
+        if hint_id is None:
+            return None
+        hint_def = next((row for row in self.bundle.intel_hints if row.hint_id == hint_id), None)
+        if hint_def is None:
+            return None
+        if auto:
+            self.repo.set_int_meta("last_auto_intel_turn", state.world.turn)
+        self.repo.set_str_meta("last_intel_hint_id", hint_id)
+        return {"id": hint_id, "text": t(hint_def.text_key)}
 
     def _collect_policy_effects(self, state: GameState) -> dict[str, Any]:
         effects: dict[str, Any] = {
@@ -160,6 +281,54 @@ class SimulationEngine:
             errors=[message],
         )
 
+    def _maybe_unlock_policy(self, state: GameState) -> list[str]:
+        if state.world.turn <= 0:
+            return []
+        available_rules = sorted(self.bundle.unlocks, key=lambda row: (row.min_turn, row.min_actions, row.policy_id))
+        candidates = [
+            row
+            for row in available_rules
+            if row.policy_id not in state.unlocked_policies
+            and row.policy_id not in EMERGENCY_POLICY_IDS
+            and state.world.turn >= row.min_turn
+            and state.world.turn >= row.min_actions
+        ]
+        if not candidates:
+            return []
+
+        next_unlock_turn = self.repo.get_int_meta("next_unlock_turn", 0)
+        if state.world.turn >= 6 and state.world.turn < next_unlock_turn:
+            return []
+
+        selected = candidates[0]
+        state.unlocked_policies.add(selected.policy_id)
+        self.repo.unlock_policy(selected.policy_id, turn=state.world.turn, source=selected.source)
+
+        if state.world.turn >= 6:
+            self.repo.set_int_meta("next_unlock_turn", state.world.turn + 3)
+        return [selected.policy_id]
+
+    def _update_collapse_state(self, world: WorldState, trailing_3_cashflow: float) -> bool:
+        collapse_active = self.repo.get_bool_meta("collapse_active", False)
+        recovery_streak = self.repo.get_int_meta("collapse_recovery_streak", 0)
+
+        if world.treasury < 0 and trailing_3_cashflow < 0:
+            collapse_active = True
+            recovery_streak = 0
+        elif collapse_active and world.treasury >= 0 and trailing_3_cashflow >= 0:
+            recovery_streak += 1
+            if recovery_streak >= 2:
+                collapse_active = False
+                recovery_streak = 0
+        elif collapse_active:
+            recovery_streak = 0
+        else:
+            recovery_streak = 0
+
+        self.repo.set_bool_meta("collapse_active", collapse_active)
+        self.repo.set_int_meta("collapse_recovery_streak", recovery_streak)
+        return collapse_active
+
     def advance_turn(self, policy_id: str, magnitude: float | None, target: str | None) -> SimResult:
         try:
             state = self.load_state()
@@ -170,6 +339,8 @@ class SimulationEngine:
             policy = self.bundle.policies.get(policy_id)
             if policy is None:
                 return self._invalid_result(state.world, "INVALID PARAM unknown policy")
+            if not self._policy_unlocked(state, policy_id):
+                return self._invalid_result(state.world, "INVALID PARAM policy is locked")
 
             action, error = validate_action(state=state, bundle=self.bundle, policy=policy, raw_magnitude=magnitude, target=target)
             if error:
@@ -265,6 +436,12 @@ class SimulationEngine:
             state.world.unrest = clamp(state.world.unrest, 0.0, 100.0)
             state.world.tech_level = clamp(state.world.tech_level, 0.0, 100.0)
 
+            net_cashflow = float(state.world.treasury - world_before.treasury)
+            trailing_3_cashflow = self.repo.trailing_cashflow(window=3, include_current=net_cashflow)
+            collapse_active = self._update_collapse_state(state.world, trailing_3_cashflow)
+
+            unlocked_now = self._maybe_unlock_policy(state)
+
             self._tick_policy_runtimes(state)
             self.repo.save_state(state)
 
@@ -276,6 +453,10 @@ class SimulationEngine:
                 "top_price_movers": [(gid, round(delta, 3)) for gid, delta in derived["top_movers"]],
                 "events": [e["id"] for e in event_rows],
                 "treasury": state.world.treasury,
+                "net_cashflow": round(net_cashflow, 3),
+                "trailing_3_cashflow": round(trailing_3_cashflow, 3),
+                "collapse_active": collapse_active,
+                "unlocked": unlocked_now,
             }
             self.repo.append_history(state.world.turn, action.policy_id, total_cost, summary)
             self.repo.append_events(state.world.turn, event_rows)
@@ -290,6 +471,8 @@ class SimulationEngine:
                     "inflation": derived["inflation"],
                     "volatility": derived["volatility"],
                     "events": event_rows,
+                    "collapse_active": collapse_active,
+                    "unlocked_now": unlocked_now,
                 }
             )
             self.logger.debug(
@@ -332,4 +515,6 @@ class SimulationEngine:
                 "tech_level": round(state.world.tech_level, 6),
             },
             "prices": {good_id: round(item.price, 6) for good_id, item in sorted(state.market.items())},
+            "unlocked_count": len(state.unlocked_policies),
+            "collapse_active": self.collapse_active(),
         }

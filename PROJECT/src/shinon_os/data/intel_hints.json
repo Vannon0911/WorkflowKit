@@ -1,0 +1,22 @@
+[
+  {
+    "id": "intel.shortage_watch",
+    "text_key": "intel.shortage_watch",
+    "conditions": {"min_shortages": 2}
+  },
+  {
+    "id": "intel.cashflow_watch",
+    "text_key": "intel.cashflow_watch",
+    "conditions": {"max_treasury": 8000}
+  },
+  {
+    "id": "intel.unrest_watch",
+    "text_key": "intel.unrest_watch",
+    "conditions": {"min_unrest": 35}
+  },
+  {
+    "id": "intel.research_window",
+    "text_key": "intel.research_window",
+    "conditions": {"min_stability": 55, "max_unrest": 25}
+  }
+]
