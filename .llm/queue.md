@@ -20,5 +20,6 @@ Q-0001 | IMPLEMENTED | Change map output and low-I/O workflow mode | codex | I-0
 Q-0002 | IMPLEMENTED | SHINON-OS MVP bootstrap (workflow + code + tests + docs + data) | codex | I-0003, C-0003, D-0003, CHG-0002
 Q-0003 | IMPLEMENTED | requirements.txt erstellen und befüllen | codex | I-0004, C-0004, D-0004, CHG-0003
 Q-0004 | IMPLEMENTED | Rebranding auf Shinon Alpha World + Abhängigkeiten installiert + Tests bestätigt | codex | I-0005, C-0005, D-0005, CHG-0004
+Q-0005 | IMPLEMENTED | Repository soll das Projekt enthalten (PROJECT in Repo integriert und getestet) | codex | I-0006, C-0006, D-0006, CHG-0005
 
-Next available ID: Q-0005
+Next available ID: Q-0006

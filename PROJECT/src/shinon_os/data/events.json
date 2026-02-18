@@ -1,0 +1,110 @@
+[
+  {
+    "id": "DROUGHT",
+    "label": "Drought",
+    "description": "Water stress reduced agricultural yields.",
+    "base_weight": 1.0,
+    "conditions": {"world_min": {"prosperity": 0}},
+    "effects": {
+      "good_supply_mult": {"grain": -0.22},
+      "world_add": {"prosperity": -1.2, "unrest": 1.3}
+    }
+  },
+  {
+    "id": "STRIKE",
+    "label": "Labor Strike",
+    "description": "Work stoppages hit industry throughput.",
+    "base_weight": 0.9,
+    "conditions": {"world_min": {"unrest": 25}},
+    "effects": {
+      "sector_efficiency_mult": {"industry": -0.15},
+      "world_add": {"unrest": 1.1, "stability": -0.9}
+    }
+  },
+  {
+    "id": "EPIDEMIC",
+    "label": "Epidemic Wave",
+    "description": "Public health demand spikes and morale drops.",
+    "base_weight": 0.8,
+    "conditions": {"world_min": {"unrest": 10}},
+    "effects": {
+      "good_demand_mult": {"medicine": 0.25},
+      "world_add": {"prosperity": -1.4, "unrest": 0.9}
+    }
+  },
+  {
+    "id": "FUEL_SHOCK",
+    "label": "Fuel Shock",
+    "description": "Supply chain friction drove fuel costs upward.",
+    "base_weight": 0.9,
+    "conditions": {},
+    "effects": {
+      "good_price_mult": {"fuel": 0.18},
+      "sector_efficiency_mult": {"services": -0.08},
+      "world_add": {"prosperity": -0.6}
+    }
+  },
+  {
+    "id": "INNOVATION",
+    "label": "Innovation Breakout",
+    "description": "A process innovation improved productivity expectations.",
+    "base_weight": 0.7,
+    "conditions": {"world_min": {"tech_level": 20}},
+    "effects": {
+      "world_add": {"tech_level": 1.8, "prosperity": 0.8}
+    }
+  },
+  {
+    "id": "ORE_SHORTAGE",
+    "label": "Ore Shortage",
+    "description": "Mining disruptions reduced ore availability.",
+    "base_weight": 0.8,
+    "conditions": {},
+    "effects": {
+      "good_supply_mult": {"ore": -0.22},
+      "world_add": {"unrest": 0.7}
+    }
+  },
+  {
+    "id": "BORDER_TARIFFS",
+    "label": "Border Tariffs",
+    "description": "Trade barriers increased external procurement costs.",
+    "base_weight": 0.7,
+    "conditions": {},
+    "effects": {
+      "world_add": {"treasury": -1200.0, "unrest": 0.8}
+    }
+  },
+  {
+    "id": "HARVEST_BOOM",
+    "label": "Harvest Boom",
+    "description": "A strong season lifted grain output.",
+    "base_weight": 0.9,
+    "conditions": {},
+    "effects": {
+      "good_supply_mult": {"grain": 0.25},
+      "world_add": {"prosperity": 0.7}
+    }
+  },
+  {
+    "id": "SOCIAL_MEDIA_PANIC",
+    "label": "Social Panic",
+    "description": "A rumor cycle amplified social volatility.",
+    "base_weight": 0.8,
+    "conditions": {},
+    "effects": {
+      "world_add": {"unrest": 2.0, "stability": -1.0}
+    }
+  },
+  {
+    "id": "MEDICAL_BREAKTHROUGH",
+    "label": "Medical Breakthrough",
+    "description": "A treatment advance expanded medicine supply.",
+    "base_weight": 0.7,
+    "conditions": {"world_min": {"tech_level": 15}},
+    "effects": {
+      "good_supply_mult": {"medicine": 0.30},
+      "world_add": {"prosperity": 0.9, "tech_level": 0.8}
+    }
+  }
+]

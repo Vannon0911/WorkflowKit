@@ -1,0 +1,5 @@
+# SHINON OS dependency list
+# Runtime: stdlib only
+
+# Testing
+pytest>=8.0

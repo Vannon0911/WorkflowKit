@@ -1,11 +1,11 @@
 {
   "project": "SHINON_ALPHA_WORLD",
-  "checkpoint": "CP-0006",
+  "checkpoint": "CP-0007",
   "status": "DONE",
-  "spec_rev": 7,
-  "queue_rev": 6,
-  "build_rev": 3,
-  "step": 14,
+  "spec_rev": 8,
+  "queue_rev": 7,
+  "build_rev": 4,
+  "step": 15,
   "base_build": "none",
   "must_read_all_llm_files": false
 }

@@ -1,0 +1,26 @@
+{
+  "world": {
+    "population": 120000,
+    "prosperity": 52.0,
+    "stability": 61.0,
+    "unrest": 18.0,
+    "tech_level": 32.0,
+    "treasury": 50000
+  },
+  "economy": {
+    "k_demand": 0.35,
+    "shortage_threshold": 0.12,
+    "noise_amplitude": 0.01,
+    "event_chance": 0.28
+  },
+  "population_needs": {
+    "grain": 0.0028,
+    "bread": 0.0019,
+    "wood": 0.0006,
+    "tools": 0.0004,
+    "ore": 0.0001,
+    "metal": 0.0002,
+    "medicine": 0.0013,
+    "fuel": 0.0014
+  }
+}

@@ -8,3 +8,4 @@ D-0002 | 2026-02-18 | CP-0003 | Add compact change-mapping and low-I/O read stra
 D-0003 | 2026-02-18 | CP-0004 | Implement MVP with strict view/action turn semantics and deterministic RNG seeded by DB state | Meets gameplay invariants and reproducibility tests
 D-0004 | 2026-02-18 | CP-0005 | Add PROJECT/requirements.txt with only required packages | Preserve minimal dependency surface and easy install path
 D-0005 | 2026-02-18 | CP-0006 | Rename visible project identity to Shinon Alpha World and keep runtime package name unchanged | Avoid import/runtime regressions while applying requested rename
+D-0006 | 2026-02-18 | CP-0007 | Keep existing WORKFLOW git repo and include project by adding WORKFLOW/PROJECT snapshot | Satisfies repo scope request without destructive git-root migration

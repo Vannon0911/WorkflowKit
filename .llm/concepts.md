@@ -9,3 +9,4 @@ C-0002 | 2026-02-18 | CP-0003 | Manifest/snapshot/tail model with changes.md map
 C-0003 | 2026-02-18 | CP-0004 | Deterministic SHINON kernel pipeline (sense->interpret->stance->plan->execute->narrate) over SQLite-backed economy sim | I-0003
 C-0004 | 2026-02-18 | CP-0005 | Keep requirements minimal: stdlib runtime + pytest for tests in requirements.txt | I-0004
 C-0005 | 2026-02-18 | CP-0006 | Rebrand via metadata/docs only (README + pyproject + state project id) without module-path breakage | I-0005
+C-0006 | 2026-02-18 | CP-0007 | Sync root PROJECT into repository-local WORKFLOW/PROJECT and validate there with pytest | I-0006

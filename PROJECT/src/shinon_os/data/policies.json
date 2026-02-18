@@ -1,0 +1,126 @@
+[
+  {
+    "id": "TAX_ADJUST",
+    "label": "Tax Adjustment",
+    "description": "Adjust tax pressure. More taxes raise treasury income but hurt social metrics.",
+    "target_type": "none",
+    "cost": 800,
+    "duration_ticks": 3,
+    "cooldown_ticks": 2,
+    "magnitude": {"min": -0.20, "max": 0.20, "step": 0.05, "default": 0.05},
+    "effects": {
+      "world_add": {"prosperity": -6.0, "unrest": 5.0},
+      "treasury_income_per_turn": 12000.0
+    },
+    "constraints": {"min_treasury": 1000}
+  },
+  {
+    "id": "SUBSIDY_SECTOR",
+    "label": "Sector Subsidy",
+    "description": "Boost output of one sector at recurring fiscal cost.",
+    "target_type": "sector",
+    "cost": 1200,
+    "duration_ticks": 3,
+    "cooldown_ticks": 2,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "sector_output_mult": {"target": 0.12},
+      "treasury_upkeep_per_turn": 900.0,
+      "world_add": {"prosperity": 0.6, "unrest": -0.4}
+    },
+    "constraints": {"min_treasury": 3000}
+  },
+  {
+    "id": "FUND_RESEARCH",
+    "label": "Fund Research",
+    "description": "Raise technology growth with immediate and recurring cost.",
+    "target_type": "none",
+    "cost": 2500,
+    "duration_ticks": 4,
+    "cooldown_ticks": 3,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "world_add": {"tech_level": 1.2, "prosperity": 0.3},
+      "treasury_upkeep_per_turn": 700.0
+    },
+    "constraints": {"min_treasury": 5000}
+  },
+  {
+    "id": "BUILD_INFRA",
+    "label": "Build Infrastructure",
+    "description": "Increase target sector capacity after a 2-turn construction delay.",
+    "target_type": "sector",
+    "cost": 3200,
+    "duration_ticks": 5,
+    "cooldown_ticks": 4,
+    "magnitude": {"min": 1.00, "max": 3.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "sector_capacity_add": {"target": 4.0},
+      "capacity_delay": 2,
+      "treasury_upkeep_per_turn": 300.0,
+      "world_add": {"stability": 0.3}
+    },
+    "constraints": {"min_treasury": 6000}
+  },
+  {
+    "id": "SECURITY_BUDGET",
+    "label": "Security Budget",
+    "description": "Suppress unrest quickly with a long-run prosperity drag.",
+    "target_type": "none",
+    "cost": 1500,
+    "duration_ticks": 3,
+    "cooldown_ticks": 2,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "world_add": {"unrest": -2.0, "prosperity": -0.7, "stability": 0.8},
+      "treasury_upkeep_per_turn": 500.0
+    },
+    "constraints": {"min_treasury": 2500}
+  },
+  {
+    "id": "RATIONING",
+    "label": "Rationing Program",
+    "description": "Contain shortage unrest at prosperity cost.",
+    "target_type": "none",
+    "cost": 600,
+    "duration_ticks": 2,
+    "cooldown_ticks": 2,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "world_add": {"prosperity": -1.0, "unrest": -1.2},
+      "shortage_unrest_factor_add": -0.5
+    },
+    "constraints": {"min_treasury": 1200}
+  },
+  {
+    "id": "WORK_HOURS_REFORM",
+    "label": "Work Hours Reform",
+    "description": "Improve stability but lower aggregate output.",
+    "target_type": "none",
+    "cost": 700,
+    "duration_ticks": 4,
+    "cooldown_ticks": 3,
+    "magnitude": {"min": 0.50, "max": 2.00, "step": 0.50, "default": 1.00},
+    "effects": {
+      "world_add": {"stability": 1.0, "prosperity": 0.2},
+      "global_output_mult": -0.1
+    },
+    "constraints": {"min_treasury": 1500}
+  },
+  {
+    "id": "IMPORT_PROGRAM",
+    "label": "Import Program",
+    "description": "Inject targeted good supply in exchange for treasury outflow.",
+    "target_type": "good",
+    "cost": 1000,
+    "duration_ticks": 3,
+    "cooldown_ticks": 1,
+    "magnitude": {"min": 5.00, "max": 25.00, "step": 5.00, "default": 10.00},
+    "effects": {
+      "good_supply_add": {"target": 1.0},
+      "import_cost_per_unit": 40.0,
+      "world_add": {"unrest": -0.3}
+    },
+    "constraints": {"min_treasury": 3000}
+  }
+]

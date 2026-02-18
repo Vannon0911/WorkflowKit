@@ -1,0 +1,29 @@
+[
+  {
+    "id": "agriculture",
+    "label": "Agriculture",
+    "capacity": 110.0,
+    "efficiency": 0.82,
+    "upkeep": 900.0,
+    "inputs": {"tools": 0.40, "fuel": 0.30},
+    "outputs": {"grain": 7.00, "bread": 1.00, "wood": 1.00}
+  },
+  {
+    "id": "industry",
+    "label": "Industry",
+    "capacity": 95.0,
+    "efficiency": 0.76,
+    "upkeep": 1100.0,
+    "inputs": {"wood": 1.50, "grain": 0.50, "fuel": 0.90},
+    "outputs": {"tools": 2.00, "ore": 2.00, "metal": 1.00, "fuel": 0.20}
+  },
+  {
+    "id": "services",
+    "label": "Services",
+    "capacity": 105.0,
+    "efficiency": 0.80,
+    "upkeep": 850.0,
+    "inputs": {"grain": 1.20, "tools": 0.30, "fuel": 0.70},
+    "outputs": {"bread": 2.00, "medicine": 1.00}
+  }
+]
